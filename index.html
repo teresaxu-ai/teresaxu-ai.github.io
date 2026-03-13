@@ -2139,6 +2139,13 @@ gap: 1.5rem;
 }
 
 @media (max-width: 768px) {
+/* On mobile, give navbar a visible bar when on hero so logo + hamburger aren’t invisible */
+.navbar:not(.scrolled) {
+  background: rgba(10, 14, 39, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
 /* Hide nav links by default; show as full-width dropdown when menu is open */
 .navbar .container { position: relative; flex-wrap: wrap; }
 .nav-links {
@@ -2166,6 +2173,14 @@ gap: 1.5rem;
   padding: 1rem 1.5rem;
   font-size: 1rem;
   border-radius: 0;
+}
+/* Dropdown has light background — force dark link text when open (overrides hero white text) */
+.nav-links.mobile-active a {
+  color: var(--primary-700) !important;
+}
+.nav-links.mobile-active a:hover {
+  color: var(--accent-600) !important;
+  background: var(--accent-50);
 }
 .mobile-menu-toggle { display: block; }
 
