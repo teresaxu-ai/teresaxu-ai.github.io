@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Building AI Products for Real Workflows | Teresa Xu</title>
+<meta name="description" content="Lessons from building small AI projects and watching them break. Observations on reliability, workflow integration, and what actually matters.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Blog Post Styles */
+:root {
+  --primary-950: #020617;
+  --primary-900: #0f172a;
+  --primary-800: #1e293b;
+  --primary-700: #334155;
+  --primary-600: #475569;
+  --primary-500: #64748b;
+  --primary-400: #94a3b8;
+  --primary-300: #cbd5e1;
+  --primary-200: #e2e8f0;
+  --primary-100: #f1f5f9;
+  --primary-50: #f8fafc;
+  
+  --accent-600: #2563eb;
+  --accent-500: #3b82f6;
+  --accent-400: #60a5fa;
+  --accent-300: #93c5fd;
+  --accent-200: #dbeafe;
+  --accent-100: #f0f8ff;
+  --accent-50: #f8fbff;
+  
+  --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  --gradient-accent: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+  --gradient-subtle: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--primary-50);
+  color: var(--primary-800);
+  line-height: 1.7;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Navigation */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 15px 0;
+  background: rgba(248, 250, 252, 0.9);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar .logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-900);
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--primary-600);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--accent-600);
+  background: var(--accent-50);
+}
+
+/* Article Header */
+.article-header {
+  background: white;
+  padding: 8rem 0 4rem;
+  margin-top: 70px;
+  border-bottom: 1px solid var(--primary-200);
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--primary-500);
+}
+
+.article-category {
+  background: var(--accent-100);
+  color: var(--accent-600);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-600);
+  text-decoration: none;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  transition: color 0.3s ease;
+}
+
+.back-link:hover {
+  color: var(--accent-600);
+}
+
+.article-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--primary-900);
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.article-subtitle {
+  font-size: 1.3rem;
+  color: var(--primary-600);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.article-author-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.author-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--gradient-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+}
+
+.author-details h4 {
+  font-weight: 600;
+  color: var(--primary-900);
+}
+
+.author-details p {
+  color: var(--primary-500);
+  font-size: 0.9rem;
+}
+
+/* Article Content */
+.article-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.content-section {
+  margin-bottom: 3rem;
+}
+
+.content-section h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--primary-900);
+  margin-bottom: 1.5rem;
+  margin-top: 3rem;
+}
+
+.content-section h3 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--primary-800);
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+.content-section p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--primary-700);
+  margin-bottom: 1.5rem;
+}
+
+.content-section ul, .content-section ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.content-section li {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--primary-700);
+  margin-bottom: 0.5rem;
+}
+
+.content-section strong {
+  font-weight: 600;
+  color: var(--primary-900);
+}
+
+.highlight-box {
+  background: var(--accent-50);
+  border: 1px solid var(--accent-200);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2.5rem 0;
+  border-left: 4px solid var(--accent-500);
+}
+
+.highlight-box h4 {
+  color: var(--accent-600);
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.highlight-box p {
+  margin-bottom: 0;
+  color: var(--primary-700);
+}
+
+.code-block {
+  background: var(--primary-900);
+  color: var(--primary-100);
+  padding: 1.5rem;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  margin: 2rem 0;
+}
+
+.quote-block {
+  border-left: 4px solid var(--primary-300);
+  padding-left: 2rem;
+  margin: 2rem 0;
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--primary-600);
+}
+
+/* Stat row: compact horizontal stats for impact */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+.stat-card {
+  background: white;
+  border: 1px solid var(--primary-200);
+  border-radius: 12px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+}
+.stat-card .stat-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--accent-600);
+  margin-bottom: 0.25rem;
+}
+.stat-card .stat-label {
+  font-size: 0.85rem;
+  color: var(--primary-600);
+}
+
+/* Key takeaway: bold strip between sections */
+.key-takeaway {
+  background: var(--primary-900);
+  color: white;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin: 2.5rem 0;
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.6;
+  text-align: center;
+}
+.key-takeaway em { color: var(--accent-300); font-style: normal; font-weight: 600; }
+
+/* Phased steps: numbered circles */
+.phase-steps {
+  counter-reset: phase;
+  margin: 2rem 0;
+}
+.phase-step {
+  display: flex;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.phase-step-num {
+  flex-shrink: 0;
+  counter-increment: phase;
+  width: 40px;
+  height: 40px;
+  background: var(--primary-900);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-top: 0.15rem;
+}
+.phase-step-body h4 {
+  font-weight: 600;
+  color: var(--primary-900);
+  margin-bottom: 0.35rem;
+}
+.phase-step-body p {
+  font-size: 1rem;
+  color: var(--primary-700);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Checklist-style bullets for strategy lists */
+.check-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+.check-list li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--primary-700);
+}
+.check-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.4rem;
+  height: 1.4rem;
+  line-height: 1.4rem;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: white;
+  background: var(--accent-500);
+  border-radius: 50%;
+}
+
+.related-articles {
+  background: var(--primary-100);
+  padding: 3rem 2rem;
+  margin-top: 4rem;
+}
+
+.related-articles h3 {
+  text-align: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: var(--primary-900);
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.related-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--primary-200);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.related-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-200);
+}
+
+.related-card h4 {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--primary-900);
+}
+
+.related-card p {
+  color: var(--primary-600);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.related-meta {
+  font-size: 0.85rem;
+  color: var(--primary-500);
+}
+
+.footer {
+  background: var(--primary-900);
+  color: var(--primary-400);
+  padding: 3rem 0 2rem;
+}
+
+.footer-bottom {
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .article-title { font-size: 2.5rem; }
+  .article-content { padding: 3rem 1.5rem; }
+  .content-section h2 { font-size: 1.8rem; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="container">
+    <a href="../index.html" class="logo">Teresa Xu</a>
+    <ul class="nav-links">
+      <li><a href="../index.html#featured-projects">Work</a></li>
+      <li><a href="../index.html#insights">Insights</a></li>
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Article Header -->
+<header class="article-header">
+  <div class="container">
+    <a href="../index.html#insights" class="back-link">← Back to Insights</a>
+    
+    <div class="article-meta">
+      <span class="article-category">AI Strategy</span>
+      <span>•</span>
+      <span>March 12, 2025</span>
+      <span>•</span>
+      <span>14 min read</span>
+    </div>
+    
+    <h1 class="article-title">Building AI Products for Real Workflows: Bridging the Demo–Reality Gap</h1>
+    <p class="article-subtitle">Lessons from building small AI projects and watching them break in unexpected ways. A work in progress.</p>
+    
+    <div class="article-author-info">
+      <div class="author-avatar">TX</div>
+      <div class="author-details">
+        <h4>Teresa Xu</h4>
+        <p>Product Designer & AI Strategist</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Article Content -->
+<main class="article-content">
+
+  <!-- Opening: Observations from Building -->
+  <section class="content-section">
+    <p>I've been building small AI projects for a while now. Job agents that scrape and score listings. Chatbots that answer questions about data. Each one taught me the same lesson: <strong>demos are easy, production is hard.</strong></p>
+
+    <p>In a controlled test, everything works. The data is clean, the users follow the script, the edge cases don't exist. Then you ship it. Real data arrives messy. Real users do things you didn't anticipate. The 12-turn conversation in your demo becomes 50 turns with interruptions and context switching.</p>
+
+    <div class="key-takeaway">
+      <em>Impressive demos don't create value. Reliable operations do.</em>
+    </div>
+
+    <p>I keep seeing people chase the word "AI" instead of solving an actual problem. Someone asked me what AI they should use. I asked what problem they were trying to solve. They didn't have an answer. That's backwards.</p>
+
+    <p>From what I've observed, the AI products that actually stick at the moment tend to tackle boring work. Invoice processing. Meeting notes. Data entry. The tasks nobody wants to do, but that happen constantly. These have clear ROI and well-defined boundaries. Meanwhile, "innovative" predictive dashboards often sit unused.</p>
+
+    <p>Start with the unglamorous work. Get it working reliably. Then expand.</p>
+
+    <div class="quote-block">
+      "Start boring. Scale boring. Compound boring."
+    </div>
+  </section>
+
+  <!-- Section 1: Understanding Real Workflows -->
+  <section class="content-section">
+    <h2>Understanding Real Workflows</h2>
+
+    <p>Before building any automation, I try to do the task manually first. Walk through every step. Document where the data comes from, where it breaks, where people get frustrated. There's always complexity you can't see from the outside.</p>
+
+    <p>From my own projects, I've learned that the obvious feature is rarely the important one. I once spent time on a chatbot interface when what actually mattered was getting large sum of contents into a usebable format. The interface was nice to have. The data pipeline was essential.</p>
+
+    <div class="key-takeaway">
+      <em>Don't change the workflow. Augment it.</em>
+    </div>
+
+    <p>The best AI products I've used are invisible. They just make familiar tools work better.</p>
+  </section>
+
+  <!-- Section 2: Reliability -->
+  <section class="content-section">
+    <h2>Reliability Over Shiny Intelligence</h2>
+
+    <p>Demos celebrate surprising answers. Production needs consistency. It is better to have a system that handles 80% of cases predictably than one that gets 95% right but fails randomly on the rest. Unpredictable failures destroy trust. Limited scope doesn't.</p>
+
+    <p>Edge cases hide in demos. They find you in production. Ambiguous inputs, partial data, contradictory requirements. The hard part isn't building for perfect conditions. It's knowing when to stop and ask for help.</p>
+
+    <h3>What I've found helpful</h3>
+    <ul>
+      <li><strong>Clear boundaries:</strong> Be explicit about what the system can and can't do. Vague promises lead to misplaced trust.</li>
+      <li><strong>Consistent behavior:</strong> Same input should yield same output. Getting different answers to the same question destroys credibility.</li>
+      <li><strong>Graceful failure:</strong> When confidence is low, pause. Ask for clarification. Hand off to a human. Better to admit uncertainty than confidently deliver garbage.</li>
+      <li><strong>Show your work:</strong> When possible, explain the reasoning. Users can handle imperfection if they understand why.</li>
+    </ul>
+
+    <div class="highlight-box">
+      <h4>On trust</h4>
+      <p>From what I've read and experienced, most companies keep AI limited to routine tasks not because the technology is broken, but because reliability hasn't been prioritized. Get that right first.</p>
+    </div>
+  </section>
+
+  <!-- Section 3: Human–AI Collaboration -->
+  <section class="content-section">
+    <h2>Designing for Human–AI Collaboration</h2>
+
+    <p>In my projects, I've found that AI works best as a helper, not a replacement. It handles the routine bulk, but I always want a human in the loop for anything important.</p>
+
+    <p>My job agent, for example, can score and filter listings automatically. But I still review the top matches personally. The AI narrows the field. I make the final call. That feels like the right balance.</p>
+
+    <h3>When to involve a human</h3>
+    <ul>
+      <li><strong>Ambiguous inputs:</strong> When the request is unclear or the data is contradictory, ask rather than assume.</li>
+      <li><strong>High-stakes decisions:</strong> Anything with significant consequences should have human oversight.</li>
+      <li><strong>Edge cases:</strong> When the system encounters something it hasn't seen before, escalate rather than guess.</li>
+    </ul>
+
+    <div class="key-takeaway">
+      Human judgment keeps trust intact. Speed without oversight is just risk.
+    </div>
+
+    <p>For more complex workflows, I'm experimenting with breaking tasks into smaller components that hand off to each other, rather than one massive system. Each component does one thing well and passes results to the next.</p>
+
+    <p>Showing your work matters. In my chatbot project, I found that when the system explained its reasoning, users were more forgiving of imperfect answers. Black box failures feel personal. Understood failures feel manageable.</p>
+
+    <div class="quote-block">
+      AI doesn't replace your judgment. It extends it. The decisions stay yours.
+    </div>
+  </section>
+
+  <!-- Section 4: Feedback Loops -->
+  <section class="content-section">
+    <h2>Building Feedback Loops</h2>
+
+    <p>Something I learned the hard way: users rarely tell you when your AI is just okay. They only complain when it breaks badly. So how do you know if it's actually helping?</p>
+
+    <div class="quote-block">
+      If trust is the currency of AI adoption, feedback is the mechanism that builds it.
+    </div>
+
+    <p>These are approaches I'm trying in my own projects:</p>
+
+    <ul class="check-list">
+      <li><strong>Watch behavior, not words.</strong> Did I use that generated email draft or rewrite it? Did the suggested summary help or did I scroll past it? Actions reveal more than feedback forms.</li>
+      <li><strong>Adjust scope based on what works.</strong> If I'm constantly correcting a feature, it needs more constraints. If I'm accepting outputs without edits, maybe it can do more.</li>
+      <li><strong>Track outcomes.</strong> Not just "did it run" but "did it help." Am I finishing tasks faster? Is the quality better? Would I use this again?</li>
+    </ul>
+
+    <div class="highlight-box">
+      <h4>What I'm learning</h4>
+      <p>Focus on whether the system is actually helping, not whether it's technically impressive. When I can see the AI adapting to my needs, I trust it more. That's what I'm trying to build.</p>
+    </div>
+  </section>
+
+  <!-- Section 5: Pragmatic Development -->
+  <section class="content-section">
+    <h2>How I'm Approaching Development</h2>
+
+    <p>My process is still evolving, but here's what's working for me:</p>
+
+    <div class="phase-steps">
+      <div class="phase-step">
+        <div class="phase-step-num">1</div>
+        <div class="phase-step-body">
+          <h4>Start manually</h4>
+          <p>Before writing any automation, I do the task myself for a while. I document the steps, the pain points, the edge cases. I almost always find complexity I didn't anticipate.</p>
+        </div>
+      </div>
+      <div class="phase-step">
+        <div class="phase-step-num">2</div>
+        <div class="phase-step-body">
+          <h4>Build small, test early</h4>
+          <p>I automate one piece at a time. Gather data first. Process it second. Generate output last. I test each piece before connecting them. It's slower, but I catch problems earlier.</p>
+        </div>
+      </div>
+      <div class="phase-step">
+        <div class="phase-step-num">3</div>
+        <div class="phase-step-body">
+          <h4>Expand carefully</h4>
+          <p>When something works, I widen its scope gradually. I keep reviewing outputs personally. Only when I'm consistently happy with results do I let it run more autonomously.</p>
+        </div>
+      </div>
+    </div>
+
+    <p>I'm also learning to plan for the human side. Changing tools is easy. Changing habits is hard. I try to start with things that are obviously useful, learn from what happens, and adjust.</p>
+  </section>
+
+  <!-- Section 6: Measuring Impact -->
+  <section class="content-section">
+    <h2>Measuring What Matters</h2>
+
+    <p>In my own projects, I'm trying to measure outcomes, not activity:</p>
+
+    <ul>
+      <li><strong>Time to done.</strong> Am I finishing tasks faster with the AI than without it? Not "jobs processed" but "time from start to finish."</li>
+      <li><strong>Decision quality.</strong> For my job agent, I track not just how many listings it finds, but how many of those turn into actual interviews. Volume is easy. Value is hard.</li>
+      <li><strong>Continued use.</strong> Do I keep coming back? A spike at launch followed by silence means I built something I don't actually need.</li>
+      <li><strong>Clean failures.</strong> When the AI gets confused, does it tell me? Or does it quietly give me garbage?</li>
+    </ul>
+
+    <div class="key-takeaway">
+      Ask not "How many queries did it handle?" Ask "Did it actually help me?"
+    </div>
+  </section>
+
+  <!-- Section 7: Conclusion -->
+  <section class="content-section">
+    <h2>Closing Thoughts</h2>
+
+    <p>These are lessons I'm learning as I build, not wisdom from years of experience. I'm still figuring this out. But a few things feel clear:</p>
+
+    <p>Start with real problems, not cool technology. Build reliability before features. Keep humans in the loop for things that matter. Measure whether you're helping, not whether you're impressive.</p>
+
+    <div class="quote-block">
+      The goal isn't to build something that looks smart. It's to build something that genuinely helps.
+    </div>
+
+    <p>Success, to me, looks like forgetting the AI is even there. I just get my work done faster and better. That's what I'm aiming for in my projects.</p>
+  </section>
+
+</main>
+
+<!-- Related Articles -->
+<section class="related-articles">
+  <div class="container">
+    <h3>Related Insights</h3>
+    <div class="related-grid">
+      <a href="product-strategy-ai.html" class="related-card">
+        <h4>How Product Strategy Changes When AI Is Involved</h4>
+        <p>Traditional product management principles need adaptation for AI products and user education strategies.</p>
+        <div class="related-meta">Product Strategy • 10 min read</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <p>© 2025 Teresa Xu. <a href="../index.html" style="color: var(--accent-400);">Return to portfolio</a></p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
