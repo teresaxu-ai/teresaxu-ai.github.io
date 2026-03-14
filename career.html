@@ -53,8 +53,8 @@ html { scroll-behavior: smooth; scroll-padding-top: 100px; }
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: var(--primary-50);
-  color: var(--primary-800);
+  background: #0a0e27;
+  color: rgba(255, 255, 255, 0.85);
   line-height: 1.6;
   overflow-x: hidden;
 }
@@ -67,10 +67,10 @@ body {
   top: 0; left: 0; right: 0;
   z-index: 1000;
   padding: 15px 0;
-  background: rgba(248, 250, 252, 0.85);
+  background: rgba(10, 14, 39, 0.85);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .navbar .container {
@@ -83,11 +83,11 @@ body {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--primary-900);
+  color: rgba(255, 255, 255, 0.95);
   text-decoration: none;
   transition: color 0.3s ease;
 }
-.logo:hover { color: var(--accent-500); }
+.logo:hover { color: var(--accent-400); }
 
 .nav-links {
   display: flex;
@@ -96,7 +96,7 @@ body {
 }
 
 .nav-links a {
-  color: var(--primary-600);
+  color: rgba(255, 255, 255, 0.65);
   text-decoration: none;
   font-weight: 500;
   padding: 0.5rem 1rem;
@@ -104,15 +104,15 @@ body {
   transition: all 0.3s ease;
 }
 
-.nav-links a:hover { color: var(--accent-600); background: var(--accent-50); }
-.nav-links a.active  { color: var(--accent-600); background: var(--accent-100); }
+.nav-links a:hover { color: rgba(255, 255, 255, 0.95); background: rgba(255, 255, 255, 0.06); }
+.nav-links a.active  { color: var(--accent-400); background: rgba(59, 130, 246, 0.12); }
 
 .mobile-menu-toggle {
   display: none;
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: var(--primary-600);
+  color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
   padding: 0.25rem;
 }
@@ -131,22 +131,22 @@ body {
    simple, centered, light background
    ================================ */
 .career-hero {
-  background: linear-gradient(135deg, #f9fafb 0%, #f1f5f9 100%);
+  background: #0a0e27;
   padding: 9rem 0 5rem;
   text-align: center;
   position: relative;
   overflow: hidden;
 }
 
-/* Faint decorative blobs — echoes the main site's ambient orbs but on a light bg */
+/* Ambient orbs on dark background — echoes the main site's hero */
 .career-hero::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 55% at 15% 85%, rgba(102, 126, 234, 0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 55% 50% at 85% 15%, rgba(139, 92, 246, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 45% 40% at 55% 55%, rgba(236, 72, 153, 0.04) 0%, transparent 60%);
+    radial-gradient(ellipse 60% 55% at 15% 85%, rgba(102, 126, 234, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 50% at 85% 15%, rgba(139, 92, 246, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 40% at 55% 55%, rgba(236, 72, 153, 0.08) 0%, transparent 60%);
   pointer-events: none;
 }
 
@@ -158,11 +158,11 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--accent-600);
-  background: var(--accent-100);
+  color: var(--accent-400);
+  background: rgba(59, 130, 246, 0.12);
   padding: 0.3rem 1rem;
   border-radius: 20px;
-  border: 1px solid var(--accent-200);
+  border: 1px solid rgba(59, 130, 246, 0.25);
   margin-bottom: 1.25rem;
 }
 
@@ -172,7 +172,7 @@ body {
   font-weight: 800;
   letter-spacing: -0.025em;
   line-height: 1.1;
-  color: var(--primary-900);
+  color: rgba(255, 255, 255, 0.95);
   margin-bottom: 1rem;
 }
 
@@ -186,7 +186,7 @@ body {
 
 .career-hero-subtitle {
   font-size: clamp(1rem, 1.5vw, 1.15rem);
-  color: var(--primary-500);
+  color: rgba(255, 255, 255, 0.5);
   max-width: 480px;
   margin: 0 auto;
   line-height: 1.7;
@@ -197,7 +197,7 @@ body {
    ================================ */
 .career-section {
   padding: 6rem 0 8rem;
-  background: linear-gradient(135deg, #f9fafb 0%, #f1f5f9 100%);
+  background: #0a0e27;
 }
 
 /* ---- Timeline wrapper ---- */
@@ -228,7 +228,7 @@ body {
 /* ---- Single timeline entry ---- */
 .timeline-entry {
   position: relative;
-  padding-left: 86px;
+  padding-left: 60px;
   margin-bottom: 2.25rem;
   opacity: 0;
   transform: translateY(28px);
@@ -242,41 +242,37 @@ body {
 .timeline-entry:nth-child(2) { transition-delay: 0.18s; }
 .timeline-entry:nth-child(3) { transition-delay: 0.31s; }
 
-/* ---- Node circle on the line ---- */
+/* ---- Node dot on the line ---- */
 .timeline-node {
   position: absolute;
-  left: 0;
-  top: 22px;
-  width: 56px;
-  height: 56px;
+  left: 18px;
+  top: 28px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: linear-gradient(135deg, #667eea 0%, #8b5cf6 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.3rem;
-  /* white ring that separates node from the line */
+  /* dark ring that separates dot from the line */
   box-shadow:
-    0 0 0 4px #f1f5f9,
-    0 4px 20px rgba(102, 126, 234, 0.35);
+    0 0 0 4px #0a0e27,
+    0 0 12px rgba(102, 126, 234, 0.5);
   z-index: 2;
   transition: transform 0.3s var(--ease-spring), box-shadow 0.3s ease;
 }
 
 .timeline-entry:hover .timeline-node {
-  transform: scale(1.1);
+  transform: scale(1.25);
   box-shadow:
-    0 0 0 4px #f1f5f9,
-    0 8px 32px rgba(102, 126, 234, 0.55);
+    0 0 0 4px #0a0e27,
+    0 0 20px rgba(102, 126, 234, 0.8);
 }
 
 /* ---- Job card ---- */
 .job-card {
-  background: #ffffff;
-  border: 1px solid var(--primary-200);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 18px;
   padding: 2rem 2.25rem 2rem;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   transition:
     transform  0.35s var(--ease-smooth),
     box-shadow 0.35s var(--ease-smooth),
@@ -285,10 +281,8 @@ body {
 
 .timeline-entry:hover .job-card {
   transform: translateY(-5px);
-  box-shadow:
-    0 20px 40px -8px rgba(0, 0, 0, 0.1),
-    0 8px 16px -4px rgba(0, 0, 0, 0.06);
-  border-color: var(--accent-300);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  border-color: rgba(102, 126, 234, 0.3);
 }
 
 /* ---- Card header row ---- */
@@ -305,7 +299,7 @@ body {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
-  color: var(--primary-900);
+  color: rgba(255, 255, 255, 0.95);
   line-height: 1.3;
 }
 
@@ -344,16 +338,16 @@ body {
   display: inline-block;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--accent-600);
+  color: var(--accent-400);
   text-decoration: none;
   margin-bottom: 0.25rem;
   transition: color 0.2s ease;
 }
-.job-company:hover { color: var(--accent-500); text-decoration: underline; }
+.job-company:hover { color: var(--accent-300); text-decoration: underline; }
 
 .job-dates {
   font-size: 0.85rem;
-  color: var(--primary-400);
+  color: rgba(255, 255, 255, 0.35);
   margin-bottom: 1.5rem;
 }
 
@@ -363,7 +357,7 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--primary-500);
+  color: rgba(255, 255, 255, 0.4);
   margin-bottom: 0.9rem;
 }
 
@@ -380,7 +374,7 @@ body {
   gap: 0.6rem;
   font-size: 0.92rem;
   line-height: 1.65;
-  color: var(--primary-600);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* Green check-circle — inline SVG as data URI */
@@ -467,10 +461,10 @@ body {
     position: absolute;
     top: 100%; left: 0; right: 0;
     flex-direction: column;
-    background: rgba(248, 250, 252, 0.98);
+    background: rgba(10, 14, 39, 0.98);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--primary-200);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     padding: 0.75rem 0;
     gap: 0;
     box-shadow: var(--shadow-xl);
@@ -481,14 +475,14 @@ body {
   .nav-links.mobile-active   { display: flex; }
   .nav-links li              { width: 100%; }
   .nav-links li a            { display: block; padding: 1rem 1.5rem; font-size: 1rem; border-radius: 0; }
-  .nav-links.mobile-active a { color: var(--primary-700) !important; }
-  .nav-links.mobile-active a:hover { color: var(--accent-600) !important; background: var(--accent-50); }
+  .nav-links.mobile-active a { color: rgba(255, 255, 255, 0.75) !important; }
+  .nav-links.mobile-active a:hover { color: var(--accent-400) !important; background: rgba(255, 255, 255, 0.06); }
   .mobile-menu-toggle        { display: block; }
 
   /* Timeline collapses on mobile */
   .timeline::before    { left: 18px; }
-  .timeline-node       { width: 40px; height: 40px; font-size: 1rem; left: -1px; top: 18px; }
-  .timeline-entry      { padding-left: 58px; }
+  .timeline-node       { width: 14px; height: 14px; left: 11px; top: 22px; }
+  .timeline-entry      { padding-left: 46px; }
   .job-header          { flex-direction: column; gap: 0.4rem; }
   .job-card            { padding: 1.5rem 1.25rem; }
   .career-section      { padding: 4rem 0 6rem; }
@@ -546,8 +540,8 @@ body {
     <div class="timeline">
 
       <!-- ── Entry 1 ── AlixPartners ── -->
-      <article class="timeline-entry" aria-label="AlixPartners role">
-        <div class="timeline-node" aria-hidden="true">📊</div>
+      <article class="timeline-entry" aria-label="AlixPartners: AI &amp; Analytics Associate position">
+        <div class="timeline-node" aria-hidden="true"></div>
         <div class="job-card">
           <div class="job-header">
             <h2 class="job-title">AI &amp; Analytics Associate</h2>
@@ -569,8 +563,8 @@ body {
       </article>
 
       <!-- ── Entry 2 ── JPMorgan Chase ── -->
-      <article class="timeline-entry" aria-label="JPMorgan Chase role">
-        <div class="timeline-node" aria-hidden="true">🏦</div>
+      <article class="timeline-entry" aria-label="JPMorgan Chase: Strategic Analytics Associate position">
+        <div class="timeline-node" aria-hidden="true"></div>
         <div class="job-card">
           <div class="job-header">
             <h2 class="job-title">Strategic Analytics Associate</h2>
@@ -589,8 +583,8 @@ body {
       </article>
 
       <!-- ── Entry 3 ── NewDay ── -->
-      <article class="timeline-entry" aria-label="NewDay Ltd role">
-        <div class="timeline-node" aria-hidden="true">💳</div>
+      <article class="timeline-entry" aria-label="NewDay Ltd: Customer Management Strategy Specialist position">
+        <div class="timeline-node" aria-hidden="true"></div>
         <div class="job-card">
           <div class="job-header">
             <h2 class="job-title">Customer Management Strategy Specialist</h2>
