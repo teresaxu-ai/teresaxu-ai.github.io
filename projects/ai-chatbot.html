@@ -91,6 +91,15 @@ body {
   background: var(--accent-50);
 }
 
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--primary-600);
+  cursor: pointer;
+}
+
 /* ---- Container ---- */
 .container {
   max-width: 1200px;
@@ -533,7 +542,31 @@ body {
   .article-body h2 { font-size: 1.6rem; }
   .demo-links { flex-direction: column; }
   .demo-links .btn { width: 100%; justify-content: center; }
-  .nav-links { display: none; }
+  .navbar .container { position: relative; flex-wrap: wrap; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: rgba(248, 250, 252, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--primary-200);
+    padding: 0.75rem 0;
+    gap: 0;
+    box-shadow: var(--shadow-xl);
+    margin-top: 0.5rem;
+    border-radius: 0 0 12px 12px;
+    list-style: none;
+  }
+  .nav-links.mobile-active { display: flex; }
+  .nav-links li { width: 100%; }
+  .nav-links li a { display: block; padding: 1rem 1.5rem; font-size: 1rem; border-radius: 0; }
+  .nav-links.mobile-active a { color: var(--primary-700); }
+  .nav-links.mobile-active a:hover { color: var(--accent-600); background: var(--accent-50); }
+  .mobile-menu-toggle { display: block; }
 }
 
 @media (max-width: 480px) {
@@ -676,11 +709,13 @@ body {
   <div class="container">
     <a href="../index.html" class="logo">Teresa Xu</a>
     <ul class="nav-links">
-      <li><a href="../index.html#featured-projects">Work</a></li>
+      <li><a href="../index.html#featured-projects">Projects</a></li>
       <li><a href="../index.html#insights">Insights</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
       <li><a href="../index.html#about">About</a></li>
       <li><a href="../index.html#contact">Contact</a></li>
     </ul>
+    <button class="mobile-menu-toggle" aria-label="Open section menu" aria-expanded="false">☰</button>
   </div>
 </nav>
 
@@ -854,6 +889,19 @@ body {
   </div>
 </footer>
 
+<script>
+(function() {
+  var toggle = document.querySelector('.mobile-menu-toggle');
+  var navLinks = document.querySelector('.nav-links');
+  if (toggle && navLinks) {
+    toggle.addEventListener('click', function() {
+      navLinks.classList.toggle('mobile-active');
+      this.setAttribute('aria-expanded', navLinks.classList.contains('mobile-active'));
+      this.textContent = navLinks.classList.contains('mobile-active') ? '✕' : '☰';
+    });
+  }
+})();
+</script>
 <script>
 (function() {
   var overlay = document.getElementById('connect-popout');
