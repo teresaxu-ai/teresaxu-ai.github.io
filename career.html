@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Career Journey | Teresa Xu</title>
+<meta name="description" content="Teresa Xu's professional experience and key achievements across AI, analytics, and financial services.">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ================================
+   CAREER JOURNEY — built on the main
+   portfolio design system
+   ================================ */
+
+:root {
+  --primary-950: #020617;
+  --primary-900: #0f172a;
+  --primary-800: #1e293b;
+  --primary-700: #334155;
+  --primary-600: #475569;
+  --primary-500: #64748b;
+  --primary-400: #94a3b8;
+  --primary-300: #cbd5e1;
+  --primary-200: #e2e8f0;
+  --primary-100: #f1f5f9;
+  --primary-50:  #f8fafc;
+
+  --accent-600: #2563eb;
+  --accent-500: #3b82f6;
+  --accent-400: #60a5fa;
+  --accent-300: #93c5fd;
+  --accent-200: #dbeafe;
+  --accent-100: #f0f8ff;
+  --accent-50:  #f8fbff;
+
+  --shadow-sm:  0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md:  0 4px 6px -1px rgb(0 0 0 / 0.1),  0 2px 4px -2px  rgb(0 0 0 / 0.1);
+  --shadow-lg:  0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px  rgb(0 0 0 / 0.1);
+  --shadow-xl:  0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--primary-50);
+  color: var(--primary-800);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ================================
+   NAVBAR  (mirrors main site)
+   ================================ */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 15px 0;
+  background: rgba(248, 250, 252, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-900);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.logo:hover { color: var(--accent-500); }
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--primary-600);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.nav-links a:hover { color: var(--accent-600); background: var(--accent-50); }
+.nav-links a.active  { color: var(--accent-600); background: var(--accent-100); }
+
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--primary-600);
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+/* ================================
+   SHARED CONTAINER
+   ================================ */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ================================
+   PAGE HERO  — matches screenshot:
+   simple, centered, light background
+   ================================ */
+.career-hero {
+  background: linear-gradient(135deg, #f9fafb 0%, #f1f5f9 100%);
+  padding: 9rem 0 5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Faint decorative blobs — echoes the main site's ambient orbs but on a light bg */
+.career-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 55% at 15% 85%, rgba(102, 126, 234, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 50% at 85% 15%, rgba(139, 92, 246, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 40% at 55% 55%, rgba(236, 72, 153, 0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.career-hero .container { position: relative; z-index: 1; }
+
+.career-hero-eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent-600);
+  background: var(--accent-100);
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+  border: 1px solid var(--accent-200);
+  margin-bottom: 1.25rem;
+}
+
+.career-hero-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.4rem, 5vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--primary-900);
+  margin-bottom: 1rem;
+}
+
+/* Gradient accent — matches site's hero headline accent */
+.career-hero-title .accent {
+  background: linear-gradient(135deg, #667eea 0%, #8b5cf6 45%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.career-hero-subtitle {
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  color: var(--primary-500);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ================================
+   CAREER SECTION
+   ================================ */
+.career-section {
+  padding: 6rem 0 8rem;
+  background: linear-gradient(135deg, #f9fafb 0%, #f1f5f9 100%);
+}
+
+/* ---- Timeline wrapper ---- */
+.timeline {
+  position: relative;
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+/* Vertical gradient line — purple → violet → pink, fades at bottom */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 28px;
+  top: 24px;
+  bottom: 24px;
+  width: 3px;
+  border-radius: 3px;
+  background: linear-gradient(
+    180deg,
+    #667eea 0%,
+    #8b5cf6 35%,
+    #ec4899 70%,
+    rgba(236, 72, 153, 0.15) 100%
+  );
+}
+
+/* ---- Single timeline entry ---- */
+.timeline-entry {
+  position: relative;
+  padding-left: 86px;
+  margin-bottom: 2.25rem;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s var(--ease-smooth), transform 0.65s var(--ease-smooth);
+}
+
+.timeline-entry.in-view { opacity: 1; transform: translateY(0); }
+
+/* Stagger */
+.timeline-entry:nth-child(1) { transition-delay: 0.05s; }
+.timeline-entry:nth-child(2) { transition-delay: 0.18s; }
+.timeline-entry:nth-child(3) { transition-delay: 0.31s; }
+
+/* ---- Node circle on the line ---- */
+.timeline-node {
+  position: absolute;
+  left: 0;
+  top: 22px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #8b5cf6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  /* white ring that separates node from the line */
+  box-shadow:
+    0 0 0 4px #f1f5f9,
+    0 4px 20px rgba(102, 126, 234, 0.35);
+  z-index: 2;
+  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s ease;
+}
+
+.timeline-entry:hover .timeline-node {
+  transform: scale(1.1);
+  box-shadow:
+    0 0 0 4px #f1f5f9,
+    0 8px 32px rgba(102, 126, 234, 0.55);
+}
+
+/* ---- Job card ---- */
+.job-card {
+  background: #ffffff;
+  border: 1px solid var(--primary-200);
+  border-radius: 18px;
+  padding: 2rem 2.25rem 2rem;
+  box-shadow: var(--shadow-md);
+  transition:
+    transform  0.35s var(--ease-smooth),
+    box-shadow 0.35s var(--ease-smooth),
+    border-color 0.35s var(--ease-smooth);
+}
+
+.timeline-entry:hover .job-card {
+  transform: translateY(-5px);
+  box-shadow:
+    0 20px 40px -8px rgba(0, 0, 0, 0.1),
+    0 8px 16px -4px rgba(0, 0, 0, 0.06);
+  border-color: var(--accent-300);
+}
+
+/* ---- Card header row ---- */
+.job-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.job-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary-900);
+  line-height: 1.3;
+}
+
+/* Green "Current" badge with pulsing dot */
+.badge-current {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(22, 163, 74, 0.1);
+  color: #15803d;
+  border: 1px solid rgba(22, 163, 74, 0.25);
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #16a34a;
+  animation: pulseDot 2s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.45; transform: scale(1.6); }
+}
+
+.job-company {
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent-600);
+  text-decoration: none;
+  margin-bottom: 0.25rem;
+  transition: color 0.2s ease;
+}
+.job-company:hover { color: var(--accent-500); text-decoration: underline; }
+
+.job-dates {
+  font-size: 0.85rem;
+  color: var(--primary-400);
+  margin-bottom: 1.5rem;
+}
+
+/* ---- Key Deliverables ---- */
+.deliverables-heading {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--primary-500);
+  margin-bottom: 0.9rem;
+}
+
+.deliverables-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.deliverables-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--primary-600);
+}
+
+/* Green check-circle — inline SVG as data URI */
+.check-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background:
+    rgba(22, 163, 74, 0.12)
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.5 8.5l3 3 6-6' stroke='%2316a34a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E")
+    no-repeat center / 11px;
+  border: 1.5px solid rgba(22, 163, 74, 0.3);
+}
+
+/* ================================
+   FOOTER  (mirrors main site exactly)
+   ================================ */
+.footer {
+  background: #0a0e27;
+  color: rgba(255, 255, 255, 0.35);
+  padding: 3rem 0 2rem;
+  position: relative;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.2), transparent);
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+.footer-section h4 {
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.footer-section p {
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 0.4rem; }
+.footer-links a {
+  color: rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+.footer-links a:hover { color: rgba(255, 255, 255, 0.8); }
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 1.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+@media (max-width: 968px) {
+  .footer-content { grid-template-columns: 1fr; gap: 1.5rem; }
+}
+
+@media (max-width: 768px) {
+  /* Mobile navbar dropdown */
+  .navbar .container { position: relative; flex-wrap: wrap; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    flex-direction: column;
+    background: rgba(248, 250, 252, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--primary-200);
+    padding: 0.75rem 0;
+    gap: 0;
+    box-shadow: var(--shadow-xl);
+    margin-top: 0.5rem;
+    border-radius: 0 0 12px 12px;
+    list-style: none;
+  }
+  .nav-links.mobile-active   { display: flex; }
+  .nav-links li              { width: 100%; }
+  .nav-links li a            { display: block; padding: 1rem 1.5rem; font-size: 1rem; border-radius: 0; }
+  .nav-links.mobile-active a { color: var(--primary-700) !important; }
+  .nav-links.mobile-active a:hover { color: var(--accent-600) !important; background: var(--accent-50); }
+  .mobile-menu-toggle        { display: block; }
+
+  /* Timeline collapses on mobile */
+  .timeline::before    { left: 18px; }
+  .timeline-node       { width: 40px; height: 40px; font-size: 1rem; left: -1px; top: 18px; }
+  .timeline-entry      { padding-left: 58px; }
+  .job-header          { flex-direction: column; gap: 0.4rem; }
+  .job-card            { padding: 1.5rem 1.25rem; }
+  .career-section      { padding: 4rem 0 6rem; }
+  .career-hero         { padding: 7rem 0 4rem; }
+}
+
+@media (max-width: 480px) {
+  .container           { padding: 0 1rem; }
+  .career-section      { padding: 3rem 0 5rem; }
+  .job-card            { padding: 1.25rem 1rem; }
+  .deliverables-list li { font-size: 0.875rem; }
+  .career-hero         { padding: 6rem 0 3.5rem; }
+}
+
+/* Focus / accessibility */
+*:focus               { outline: 3px solid var(--accent-500); outline-offset: 2px; border-radius: 4px; }
+*:focus:not(:focus-visible) { outline: none; }
+*:focus-visible       { outline: 3px solid var(--accent-500); outline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<!-- ===================== NAVBAR ===================== -->
+<nav class="navbar" aria-label="Main navigation">
+  <div class="container">
+    <a href="index.html" class="logo">Teresa Xu</a>
+    <ul class="nav-links">
+      <li><a href="index.html#featured-projects">Personal Projects</a></li>
+      <li><a href="career.html" class="active" aria-current="page">Career Journey</a></li>
+      <li><a href="index.html#insights">Insights</a></li>
+      <li><a href="index.html#skills">Skills</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <button class="mobile-menu-toggle" aria-label="Open section menu" aria-expanded="false">☰</button>
+  </div>
+</nav>
+
+<!-- ===================== PAGE HERO ===================== -->
+<header class="career-hero">
+  <div class="container">
+    <span class="career-hero-eyebrow">Professional Experience</span>
+    <h1 class="career-hero-title">
+      Career <span class="accent">Journey</span>
+    </h1>
+    <p class="career-hero-subtitle">
+      Professional experience and key achievements
+    </p>
+  </div>
+</header>
+
+<!-- ===================== TIMELINE ===================== -->
+<section class="career-section" aria-label="Career timeline">
+  <div class="container">
+    <div class="timeline">
+
+      <!-- ── Entry 1 ── AlixPartners ── -->
+      <article class="timeline-entry" aria-label="AlixPartners role">
+        <div class="timeline-node" aria-hidden="true">📊</div>
+        <div class="job-card">
+          <div class="job-header">
+            <h2 class="job-title">AI &amp; Analytics Associate</h2>
+            <span class="badge-current">
+              <span class="badge-dot" aria-hidden="true"></span>Current
+            </span>
+          </div>
+          <a href="https://www.alixpartners.com" target="_blank" rel="noopener noreferrer" class="job-company">AlixPartners</a>
+          <p class="job-dates">Oct 2025 – Present</p>
+          <p class="deliverables-heading">Key Deliverables</p>
+          <ul class="deliverables-list">
+            <li><span class="check-icon" aria-hidden="true"></span>Delivered internal training on LLM tool, AI agent and Databricks to support AI adoption and productivity across teams</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Collaborated with different teams to support the development of AI&amp;Analytical solutions</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Identified operational pain points through stakeholder interviews and designed automation proposals with clear implementation plans</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Built and deployed internal automation tools in partnership with IT to solve workflow inefficiencies</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Implemented automation workflows using Databricks, Power Automate, and custom tools to improve processes across business functions</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- ── Entry 2 ── JPMorgan Chase ── -->
+      <article class="timeline-entry" aria-label="JPMorgan Chase role">
+        <div class="timeline-node" aria-hidden="true">🏦</div>
+        <div class="job-card">
+          <div class="job-header">
+            <h2 class="job-title">Strategic Analytics Associate</h2>
+          </div>
+          <a href="https://www.jpmorganchase.com" target="_blank" rel="noopener noreferrer" class="job-company">JPMorgan Chase &amp; Co.</a>
+          <p class="job-dates">Jun 2023 – Oct 2025</p>
+          <p class="deliverables-heading">Key Deliverables</p>
+          <ul class="deliverables-list">
+            <li><span class="check-icon" aria-hidden="true"></span>Supported the launch of Chase UK's first credit card, coordinating testing, integrating feedback, and supporting rollout readiness</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Led exposure management strategy design and implementation, contributing to acquisition and collections initiatives across the personal lending lifecycle</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Built SQL and Python automation pipelines to reconcile data across multiple systems, improving data reliability and performance monitoring</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Managed governance and change control for risk strategies, ensuring version control and regulatory compliance</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Produced BRDs, Jira tickets, and Lucidchart workflows to document and visualize end-to-end processes, enabling cross-team alignment during implementation</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- ── Entry 3 ── NewDay ── -->
+      <article class="timeline-entry" aria-label="NewDay Ltd role">
+        <div class="timeline-node" aria-hidden="true">💳</div>
+        <div class="job-card">
+          <div class="job-header">
+            <h2 class="job-title">Customer Management Strategy Specialist</h2>
+          </div>
+          <a href="https://www.newday.co.uk" target="_blank" rel="noopener noreferrer" class="job-company">NewDay Ltd</a>
+          <p class="job-dates">Jul 2021 – May 2023</p>
+          <p class="deliverables-heading">Key Deliverables</p>
+          <ul class="deliverables-list">
+            <li><span class="check-icon" aria-hidden="true"></span>Owned daily and monthly portfolio performance monitoring, using SQL, Tableau, Python, and Excel to generate insights for risk and business decision-making</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Designed and implemented data-driven customer management strategies, including A/B testing and automated decisioning frameworks</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Delivered actionable analytical insights that improved customer experience and portfolio performance</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Mentored junior analysts in Python, SQL, analytical thinking, and risk strategy design, strengthening the team's analytics capability</li>
+          </ul>
+        </div>
+      </article>
+
+    </div><!-- /.timeline -->
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Teresa Xu</h4>
+        <p>Product Designer &amp; AI Strategist focused on building intelligent, user-centered experiences that bridge business strategy with emerging technology.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="index.html#featured-projects">Featured Work</a></li>
+          <li><a href="career.html">Career Journey</a></li>
+          <li><a href="index.html#insights">Insights</a></li>
+          <li><a href="index.html#about">About</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Connect</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:teresaxuwork@gmail.com">Email</a></li>
+          <li><a href="https://www.linkedin.com/in/xiaoyi-teresa-xu" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="mailto:teresaxuwork@gmail.com?subject=Job%20Opportunity&body=Hi%20Teresa%2C%0AI%20have%20this%20job%20opportunity%3A%0A%0ACould%20you%20please%20send%20a%20copy%20of%20your%20resume%3F">Resume</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Teresa Xu. Crafted with attention to detail and modern design principles.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---- Mobile menu ---- */
+  var toggle   = document.querySelector('.mobile-menu-toggle');
+  var navLinks = document.querySelector('.nav-links');
+
+  if (toggle && navLinks) {
+    toggle.addEventListener('click', function () {
+      var isOpen = navLinks.classList.toggle('mobile-active');
+      toggle.setAttribute('aria-expanded', isOpen);
+      toggle.textContent = isOpen ? '✕' : '☰';
+    });
+
+    navLinks.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        if (navLinks.classList.contains('mobile-active')) {
+          navLinks.classList.remove('mobile-active');
+          toggle.setAttribute('aria-expanded', 'false');
+          toggle.textContent = '☰';
+        }
+      });
+    });
+  }
+
+  /* ---- Scroll-reveal for timeline entries ---- */
+  var entries = document.querySelectorAll('.timeline-entry');
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(
+      function (records) {
+        records.forEach(function (rec) {
+          if (rec.isIntersecting) {
+            rec.target.classList.add('in-view');
+            observer.unobserve(rec.target);
+          }
+        });
+      },
+      { rootMargin: '0px 0px -6% 0px', threshold: 0.08 }
+    );
+    entries.forEach(function (el) { observer.observe(el); });
+  } else {
+    /* Fallback for older browsers */
+    entries.forEach(function (el) { el.classList.add('in-view'); });
+  }
+})();
+</script>
+
+</body>
+</html>
