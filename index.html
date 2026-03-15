@@ -1179,7 +1179,7 @@ font-size: 0.9rem;
    SKILLS SECTION
    ================================ */
 .section-skills {
-background: var(--primary-900);
+background: var(--primary-50);
 padding: 8rem 0;
 position: relative;
 overflow: hidden;
@@ -1193,7 +1193,7 @@ top: -120px;
 right: -100px;
 width: 500px;
 height: 500px;
-background: radial-gradient(ellipse, rgba(59,130,246,0.12) 0%, transparent 70%);
+background: radial-gradient(ellipse, rgba(59,130,246,0.08) 0%, transparent 70%);
 pointer-events: none;
 }
 
@@ -1204,12 +1204,12 @@ bottom: -100px;
 left: -80px;
 width: 400px;
 height: 400px;
-background: radial-gradient(ellipse, rgba(139,92,246,0.1) 0%, transparent 70%);
+background: radial-gradient(ellipse, rgba(139,92,246,0.07) 0%, transparent 70%);
 pointer-events: none;
 }
 
 .section-skills .section-header h2 {
-color: white;
+color: var(--primary-900);
 }
 
 .section-skills .section-header h2::after {
@@ -1217,7 +1217,7 @@ background: var(--gradient-accent);
 }
 
 .section-skills .section-header p {
-color: var(--primary-400);
+color: var(--primary-600);
 }
 
 /* Skills grid: 4 columns on wide, 2 on mid, 1 on mobile */
@@ -1231,13 +1231,14 @@ z-index: 1;
 
 /* Individual skill group card */
 .skill-group {
-background: rgba(255,255,255,0.04);
-border: 1px solid rgba(255,255,255,0.08);
+background: white;
+border: 1px solid var(--primary-200);
 border-radius: 16px;
 padding: 1.5rem 1.5rem 1.75rem;
 transition: all 0.35s var(--ease-smooth);
 position: relative;
 overflow: hidden;
+box-shadow: var(--shadow-sm);
 }
 
 .skill-group::before {
@@ -1252,10 +1253,10 @@ opacity: 0.9;
 }
 
 .skill-group:hover {
-background: rgba(255,255,255,0.07);
-border-color: rgba(255,255,255,0.14);
+background: var(--primary-50);
+border-color: var(--accent-300);
 transform: translateY(-4px);
-box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+box-shadow: 0 16px 40px rgba(0,0,0,0.08);
 }
 
 /* Per-group accent colours on the top bar */
@@ -1284,7 +1285,7 @@ font-size: 0.8rem;
 font-weight: 700;
 letter-spacing: 0.08em;
 text-transform: uppercase;
-color: rgba(255,255,255,0.6);
+color: var(--primary-600);
 }
 
 /* Individual skill pills */
@@ -1295,9 +1296,9 @@ gap: 0.45rem;
 }
 
 .skill-pill {
-background: rgba(255,255,255,0.07);
-border: 1px solid rgba(255,255,255,0.1);
-color: rgba(255,255,255,0.85);
+background: var(--primary-100);
+border: 1px solid var(--primary-200);
+color: var(--primary-700);
 font-size: 0.78rem;
 font-weight: 500;
 padding: 0.3rem 0.7rem;
@@ -1308,17 +1309,17 @@ white-space: nowrap;
 }
 
 .skill-pill:hover {
-background: rgba(255,255,255,0.13);
-border-color: rgba(255,255,255,0.22);
-color: white;
+background: var(--primary-200);
+border-color: var(--primary-300);
+color: var(--primary-900);
 }
 
 /* Accent-coloured pills on hover match the group */
-.skill-group--ai .skill-pill:hover        { border-color: rgba(59,130,246,0.5);  background: rgba(59,130,246,0.1); }
-.skill-group--product .skill-pill:hover   { border-color: rgba(16,185,129,0.5);  background: rgba(16,185,129,0.1); }
-.skill-group--proto .skill-pill:hover     { border-color: rgba(245,158,11,0.5);  background: rgba(245,158,11,0.1); }
-.skill-group--design .skill-pill:hover    { border-color: rgba(236,72,153,0.5);  background: rgba(236,72,153,0.1); }
-.skill-group--deploy .skill-pill:hover    { border-color: rgba(6,182,212,0.5);   background: rgba(6,182,212,0.1);  }
+.skill-group--ai .skill-pill:hover        { border-color: rgba(59,130,246,0.4);  background: rgba(59,130,246,0.08); color: #1d4ed8; }
+.skill-group--product .skill-pill:hover   { border-color: rgba(16,185,129,0.4);  background: rgba(16,185,129,0.08); color: #047857; }
+.skill-group--proto .skill-pill:hover     { border-color: rgba(245,158,11,0.4);  background: rgba(245,158,11,0.08); color: #b45309; }
+.skill-group--design .skill-pill:hover    { border-color: rgba(236,72,153,0.4);  background: rgba(236,72,153,0.08); color: #be185d; }
+.skill-group--deploy .skill-pill:hover    { border-color: rgba(6,182,212,0.4);   background: rgba(6,182,212,0.08);  color: #0e7490; }
 
 /* Responsive */
 @media (max-width: 1100px) { .skills-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -2507,8 +2508,8 @@ outline-offset: 2px;
     <a href="#" class="logo">Teresa Xu</a>
     <ul class="nav-links">
       <li><a href="#featured-projects">Personal Projects</a></li>
-      <li><a href="#career">Career Journey</a></li>
       <li><a href="#insights">Insights</a></li>
+      <li><a href="#career">Career Journey</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -2697,82 +2698,6 @@ outline-offset: 2px;
   </div>
 </section>
 
-<!-- Career Journey Section -->
-<section id="career" class="section-career">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="display-lg fade-up">Career <span class="career-accent">Journey</span></h2>
-      <p class="body-lg fade-up">Professional experience and key achievements across AI, analytics, and financial services.</p>
-    </div>
-
-    <div class="timeline">
-
-      <!-- ── Entry 1 ── AlixPartners ── -->
-      <article class="timeline-entry" aria-label="AlixPartners: AI &amp; Analytics Associate position">
-        <div class="timeline-node" aria-hidden="true"></div>
-        <div class="job-card">
-          <div class="job-header">
-            <h3 class="job-title">AI &amp; Analytics Associate</h3>
-            <span class="badge-current">
-              <span class="badge-dot" aria-hidden="true"></span>Current
-            </span>
-          </div>
-          <a href="https://www.alixpartners.com" target="_blank" rel="noopener noreferrer" class="job-company">AlixPartners</a>
-          <p class="job-dates">Oct 2025 – Present</p>
-          <p class="deliverables-heading">Key Deliverables</p>
-          <ul class="deliverables-list">
-            <li><span class="check-icon" aria-hidden="true"></span>Delivered internal training on LLM tool, AI agent and Databricks to support AI adoption and productivity across teams</li>
-            <li><span class="check-icon" aria-hidden="true"></span>Collaborated with different teams to support the development of AI&amp;Analytical solutions</li>
-            <li><span class="check-icon" aria-hidden="true"></span>Identified operational pain points through stakeholder interviews and designed automation proposals with clear implementation plans</li>
-            <li><span class="check-icon" aria-hidden="true"></span>Built and deployed internal automation tools in partnership with IT to solve workflow inefficiencies</li>
-            <li><span class="check-icon" aria-hidden="true"></span>Implemented automation workflows using Databricks, Power Automate, and custom tools to improve processes across business functions</li>
-          </ul>
-        </div>
-      </article>
-
-      <!-- ── Entry 2 ── JPMorgan Chase ── -->
-      <article class="timeline-entry" aria-label="JPMorgan Chase: Strategic Analytics Associate position">
-        <div class="timeline-node" aria-hidden="true"></div>
-        <div class="job-card">
-          <div class="job-header">
-            <h3 class="job-title">Strategic Analytics Associate</h3>
-          </div>
-          <a href="https://www.jpmorganchase.com" target="_blank" rel="noopener noreferrer" class="job-company">JPMorgan Chase &amp; Co.</a>
-          <p class="job-dates">Jun 2023 – Oct 2025</p>
-          <p class="deliverables-heading">Key Deliverables</p>
-          <ul class="deliverables-list">
-            <li><span class="check-icon" aria-hidden="true"></span>Supported the launch of Chase UK's first credit card, coordinating testing, integrating feedback, and supporting rollout readiness</li>
-            <li><span class="check-icon" aria-hidden="true"></span>Led exposure management strategy design and implementation, contributing to acquisition and collections initiatives across the personal lending lifecycle</li>
-            <li><span class="check-icon" aria-hidden="true"></span>Built SQL and Python automation pipelines to reconcile data across multiple systems, improving data reliability and performance monitoring</li>
-            <li><span class="check-icon" aria-hidden="true"></span>Managed governance and change control for risk strategies, ensuring version control and regulatory compliance</li>
-            <li><span class="check-icon" aria-hidden="true"></span>Produced BRDs, Jira tickets, and Lucidchart workflows to document and visualize end-to-end processes, enabling cross-team alignment during implementation</li>
-          </ul>
-        </div>
-      </article>
-
-      <!-- ── Entry 3 ── NewDay ── -->
-      <article class="timeline-entry" aria-label="NewDay Ltd: Customer Management Strategy Specialist position">
-        <div class="timeline-node" aria-hidden="true"></div>
-        <div class="job-card">
-          <div class="job-header">
-            <h3 class="job-title">Customer Management Strategy Specialist</h3>
-          </div>
-          <a href="https://www.newday.co.uk" target="_blank" rel="noopener noreferrer" class="job-company">NewDay Ltd</a>
-          <p class="job-dates">Jul 2021 – May 2023</p>
-          <p class="deliverables-heading">Key Deliverables</p>
-          <ul class="deliverables-list">
-            <li><span class="check-icon" aria-hidden="true"></span>Owned daily and monthly portfolio performance monitoring, using SQL, Tableau, Python, and Excel to generate insights for risk and business decision-making</li>
-            <li><span class="check-icon" aria-hidden="true"></span>Designed and implemented data-driven customer management strategies, including A/B testing and automated decisioning frameworks</li>
-            <li><span class="check-icon" aria-hidden="true"></span>Delivered actionable analytical insights that improved customer experience and portfolio performance</li>
-            <li><span class="check-icon" aria-hidden="true"></span>Mentored junior analysts in Python, SQL, analytical thinking, and risk strategy design, strengthening the team's analytics capability</li>
-          </ul>
-        </div>
-      </article>
-
-    </div><!-- /.timeline -->
-  </div>
-</section>
-
 <!-- Insights Section -->
 <section id="insights" class="section-insights">
   <div class="container">
@@ -2848,6 +2773,82 @@ outline-offset: 2px;
         </div>
       </a>
     </div>
+  </div>
+</section>
+
+<!-- Career Journey Section -->
+<section id="career" class="section-career">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="display-lg fade-up">Career <span class="career-accent">Journey</span></h2>
+      <p class="body-lg fade-up">Professional experience and key achievements across AI, analytics, and financial services.</p>
+    </div>
+
+    <div class="timeline">
+
+      <!-- ── Entry 1 ── AlixPartners ── -->
+      <article class="timeline-entry" aria-label="AlixPartners: AI &amp; Analytics Associate position">
+        <div class="timeline-node" aria-hidden="true"></div>
+        <div class="job-card">
+          <div class="job-header">
+            <h3 class="job-title">AI &amp; Analytics Associate</h3>
+            <span class="badge-current">
+              <span class="badge-dot" aria-hidden="true"></span>Current
+            </span>
+          </div>
+          <a href="https://www.alixpartners.com" target="_blank" rel="noopener noreferrer" class="job-company">AlixPartners</a>
+          <p class="job-dates">Oct 2025 – Present</p>
+          <p class="deliverables-heading">Key Deliverables</p>
+          <ul class="deliverables-list">
+            <li><span class="check-icon" aria-hidden="true"></span>Delivered internal training on LLM tool, AI agent and Databricks to support AI adoption and productivity across teams</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Collaborated with different teams to support the development of AI&amp;Analytical solutions</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Identified operational pain points through stakeholder interviews and designed automation proposals with clear implementation plans</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Built and deployed internal automation tools in partnership with IT to solve workflow inefficiencies</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Implemented automation workflows using Databricks, Power Automate, and custom tools to improve processes across business functions</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- ── Entry 2 ── JPMorgan Chase ── -->
+      <article class="timeline-entry" aria-label="JPMorgan Chase: Strategic Analytics Associate position">
+        <div class="timeline-node" aria-hidden="true"></div>
+        <div class="job-card">
+          <div class="job-header">
+            <h3 class="job-title">Strategic Analytics Associate</h3>
+          </div>
+          <a href="https://www.jpmorganchase.com" target="_blank" rel="noopener noreferrer" class="job-company">JPMorgan Chase &amp; Co.</a>
+          <p class="job-dates">Jun 2023 – Oct 2025</p>
+          <p class="deliverables-heading">Key Deliverables</p>
+          <ul class="deliverables-list">
+            <li><span class="check-icon" aria-hidden="true"></span>Supported the launch of Chase UK's first credit card, coordinating testing, integrating feedback, and supporting rollout readiness</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Led exposure management strategy design and implementation, contributing to acquisition and collections initiatives across the personal lending lifecycle</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Built SQL and Python automation pipelines to reconcile data across multiple systems, improving data reliability and performance monitoring</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Managed governance and change control for risk strategies, ensuring version control and regulatory compliance</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Produced BRDs, Jira tickets, and Lucidchart workflows to document and visualize end-to-end processes, enabling cross-team alignment during implementation</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- ── Entry 3 ── NewDay ── -->
+      <article class="timeline-entry" aria-label="NewDay Ltd: Customer Management Strategy Specialist position">
+        <div class="timeline-node" aria-hidden="true"></div>
+        <div class="job-card">
+          <div class="job-header">
+            <h3 class="job-title">Customer Management Strategy Specialist</h3>
+          </div>
+          <a href="https://www.newday.co.uk" target="_blank" rel="noopener noreferrer" class="job-company">NewDay Ltd</a>
+          <p class="job-dates">Jul 2021 – May 2023</p>
+          <p class="deliverables-heading">Key Deliverables</p>
+          <ul class="deliverables-list">
+            <li><span class="check-icon" aria-hidden="true"></span>Owned daily and monthly portfolio performance monitoring, using SQL, Tableau, Python, and Excel to generate insights for risk and business decision-making</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Designed and implemented data-driven customer management strategies, including A/B testing and automated decisioning frameworks</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Delivered actionable analytical insights that improved customer experience and portfolio performance</li>
+            <li><span class="check-icon" aria-hidden="true"></span>Mentored junior analysts in Python, SQL, analytical thinking, and risk strategy design, strengthening the team's analytics capability</li>
+          </ul>
+        </div>
+      </article>
+
+    </div><!-- /.timeline -->
   </div>
 </section>
 
