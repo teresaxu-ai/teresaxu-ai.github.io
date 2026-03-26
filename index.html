@@ -277,8 +277,12 @@ align-items: center;
 position: relative;
 overflow: hidden;
 background: #0a0e27;
-/* Padding keeps content away from edges at every zoom level */
-padding: 7rem 2rem 4rem;
+/* Fluid padding: scales with viewport so fixed navbar never overlaps at any zoom.
+   top: 5.5rem–8rem (viewport-height driven), sides: 1rem–2rem, bottom: 3rem–4rem */
+padding-top:    clamp(5.5rem, 10vh, 8rem);
+padding-right:  clamp(1rem, 4vw, 2rem);
+padding-bottom: clamp(3rem, 6vh, 4rem);
+padding-left:   clamp(1rem, 4vw, 2rem);
 }
 
 /* Multi-layer animated gradient */
@@ -377,7 +381,7 @@ font-weight: 800;
 line-height: 1.08;
 letter-spacing: -0.03em;
 color: white;
-margin-bottom: 1.5rem;
+margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
 opacity: 0;
 transform: translateY(30px);
 animation: heroFadeUp 0.8s var(--ease-smooth) 0.4s forwards;
@@ -394,12 +398,12 @@ background-clip: text;
 
 /* Supporting description */
 .hero-description {
-font-size: clamp(1rem, 1.5vw, 1.2rem);
+font-size: clamp(1rem, 2vw, 1.2rem);
 line-height: 1.7;
 color: rgba(255, 255, 255, 0.55);
-max-width: 560px;
+max-width: 58ch; /* ~58 characters: optimal prose line length for readability */
 width: 100%;
-margin-bottom: 2.5rem;
+margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
 font-weight: 400;
 opacity: 0;
 transform: translateY(20px);
@@ -412,10 +416,17 @@ display: flex;
 gap: 1rem;
 justify-content: center;
 flex-wrap: wrap;
-margin-bottom: 2.5rem;
+max-width: 520px;
+width: 100%;
+margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
 opacity: 0;
 transform: translateY(20px);
 animation: heroFadeUp 0.8s var(--ease-smooth) 0.8s forwards;
+}
+
+.hero-buttons .btn {
+flex: 1 1 auto;
+min-width: 160px; /* wide enough for button labels; allows wrapping before truncating */
 }
 
 /* Project preview tags */
@@ -425,7 +436,9 @@ align-items: center;
 gap: 0.75rem;
 flex-wrap: wrap;
 justify-content: center;
-margin-bottom: 2.5rem;
+max-width: 760px;
+width: 100%;
+margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
 opacity: 0;
 transform: translateY(20px);
 animation: heroFadeUp 0.8s var(--ease-smooth) 1s forwards;
@@ -452,6 +465,7 @@ color: rgba(255, 255, 255, 0.5);
 font-size: 0.82rem;
 font-weight: 500;
 text-decoration: none;
+white-space: nowrap;
 transition: all 0.35s ease;
 }
 
@@ -2184,8 +2198,6 @@ gap: 1.5rem;
 .display-xl { font-size: 2.5rem; }
 .body-lg { font-size: 1.1rem; }
 
-.hero { padding-top: 6rem; padding-bottom: 3rem; }
-
 .hero-projects-label { display: none; }
 
 .hero-project-tag {
@@ -2226,12 +2238,9 @@ justify-content: center;
 }
 
 @media (max-width: 480px) {
-.hero { padding: 0 1rem; }
 .container { padding: 0 1rem; }
 .section { padding: 4rem 0; }
 .section-header { margin-bottom: 3rem; }
-
-.hero { padding-top: 5.5rem; padding-bottom: 2rem; }
 
 .section-featured { padding: 3.5rem 0; }
 .section-career { padding: 3rem 0 5rem; }
