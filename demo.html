@@ -150,8 +150,13 @@
 
     /* ── INPUT PANEL ── */
     .input-panel {
-      position: sticky;
-      top: 24px;
+      position: static;
+    }
+    @media (min-width: 900px) {
+      .input-panel {
+        position: sticky;
+        top: 24px;
+      }
     }
     .chat-window {
       background: var(--surface);
@@ -745,6 +750,76 @@
       color: var(--text-muted);
     }
     .footer strong { color: var(--accent2); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+
+      /* hero */
+      .hero { padding: 40px 16px 32px; }
+      .hero p { font-size: 1rem; }
+      .stats { gap: 20px; }
+      .stat-value { font-size: 1.25rem; }
+
+      /* layout */
+      .demo { padding: 24px 16px 48px; }
+      .split { grid-template-columns: 1fr; gap: 16px; }
+
+      /* left panel already static by default — just ensure no top offset */
+      .input-panel { top: auto; }
+
+      /* compact chat */
+      .chat-body { min-height: auto; padding: 14px 12px; gap: 12px; }
+      .chat-title { display: none; }
+      .msg { font-size: 0.8rem; }
+
+      /* metrics — hide on mobile to save space, show summary only */
+      .metrics { display: none; }
+
+      /* output topbar — stack vertically */
+      .output-topbar { flex-direction: column; align-items: flex-start; padding: 12px 14px; }
+      .repo-chips { display: none; }
+
+      /* report */
+      .report { padding: 16px; }
+      .section { margin-bottom: 28px; }
+
+      /* arch diagram — smaller font, horizontal scroll */
+      .arch-diagram { font-size: 0.65rem; padding: 12px; }
+
+      /* approach grid — single column */
+      .approach-grid { grid-template-columns: 1fr; }
+
+      /* stages — tighten up */
+      .stages::before { left: 15px; }
+      .stage-dot { width: 30px; height: 30px; font-size: 0.7rem; }
+      .stage-content { padding: 12px; }
+
+      /* alt tables — stack as key/value pairs */
+      .alt-table thead { display: none; }
+      .alt-table tr { display: flex; flex-direction: column; padding: 8px 0; border-top: 1px solid var(--border); }
+      .alt-table td { border-top: none; padding: 2px 0; }
+      .alt-table td:first-child { color: var(--accent2); font-size: 0.8rem; }
+      .alt-table td:last-child { color: var(--text-muted); font-size: 0.75rem; }
+
+      /* pattern grid — single column */
+      .pattern-grid { grid-template-columns: 1fr; }
+
+      /* repo rows — wrap on small screens */
+      .repo-row { flex-wrap: wrap; gap: 4px; }
+      .repo-row a { white-space: normal; word-break: break-all; }
+      .stars { margin-left: 0; }
+
+      /* start box */
+      .start-box { padding: 14px; }
+      .start-step { font-size: 0.8rem; }
+    }
+
+    /* very small screens */
+    @media (max-width: 380px) {
+      .hero h1 { font-size: 1.6rem; }
+      .report { padding: 12px; }
+      .stage { gap: 10px; }
+    }
   </style>
 </head>
 <body>
