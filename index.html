@@ -1015,6 +1015,26 @@ border-radius: 2px;
 .handover-preview-inner .main-card { width: 150px; padding: 0.75rem; }
 }
 
+/* GitHub Architecture Research card: full-bleed screenshot image */
+.arch-research-preview {
+z-index: 2;
+position: relative;
+width: 100%;
+height: 100%;
+min-height: 380px;
+display: flex;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+}
+.arch-research-preview img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+object-position: top center;
+display: block;
+}
+
 /* Compact solution mockup for AI Chatbot card (MarketMind UI) */
 .project-solution-mockup {
 z-index: 2;
@@ -2676,6 +2696,7 @@ outline-offset: 2px;
         <a href="projects/job-agent.html" class="hero-project-tag"><span class="dot"></span> AI Job Agent</a>
         <a href="projects/ai-chatbot.html" class="hero-project-tag"><span class="dot"></span> AI Investment Chatbot</a>
         <a href="projects/handover-tool.html" class="hero-project-tag"><span class="dot"></span> Guided Handover AI</a>
+        <a href="projects/github-architecture-research.html" class="hero-project-tag"><span class="dot"></span> GitHub Architecture Research</a>
       </div>
     </div>
   </div>
@@ -2823,6 +2844,26 @@ outline-offset: 2px;
           <div class="project-links">
             <a href="projects/handover-tool.html" class="btn btn-primary btn-sm">View Case Study</a>
             <a href="https://www.youtube.com/watch?v=QfYBv7mwWnI" target="_blank" class="btn btn-secondary btn-sm">Watch Demo</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- GitHub Architecture Research: screenshot image as project visual -->
+    <article class="featured-project fade-up stagger-4">
+      <div class="featured-project-content">
+        <div class="project-image">
+          <div class="arch-research-preview" aria-label="GitHub Architecture Research tool preview">
+            <img src="https://github.com/user-attachments/assets/016de927-beb9-46ca-8d88-e012b17d0cba" alt="GitHub Architecture Research — real-world architectural insights from GitHub" loading="lazy" />
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="project-tag">MCP · Dev Tools</span>
+          <h3 class="heading-lg">GitHub Architecture Research</h3>
+          <p>An MCP server that finds 10–20 production repos in your problem space, reads their actual code structure and dependencies, and synthesises everything into an actionable architectural brief — complete with tradeoffs, failure modes, and MVP vs. scaling guidance.</p>
+          <div class="project-links">
+            <a href="projects/github-architecture-research.html" class="btn btn-primary btn-sm">View Case Study</a>
+            <a href="https://github.com/teresaxu-ai/github-architecture-research-design" target="_blank" rel="noopener" class="btn btn-secondary btn-sm">View on GitHub</a>
           </div>
         </div>
       </div>
