@@ -659,10 +659,6 @@ body {
   <p>When you're starting a new project, you typically Google "how to build X" and get blog posts, tutorials, and opinionated takes. What you actually want is: <em>what do real production systems that solve this problem actually look like?</em></p>
   <p>This tool goes directly to GitHub, finds 10–20 production repositories in your problem space, reads their actual code structure and dependencies, and synthesises the findings into a structured architectural brief — not a list of repos, but a <strong>build plan</strong> that tells you what approaches exist, which one fits your situation, where systems commonly break, and what you need to decide yourself.</p>
 
-  <div class="hero-image-wrap">
-    <img src="https://github.com/user-attachments/assets/016de927-beb9-46ca-8d88-e012b17d0cba" alt="GitHub Architecture Research — how systems like yours are built, with real-world architectural insights from GitHub" loading="lazy" />
-  </div>
-
   <h2>How It Works</h2>
   <p>The MCP server handles <strong>data</strong> (4 GitHub API tools + a structured prompt). Claude handles <strong>intelligence</strong> (pattern extraction, synthesis, recommendations). Together, they run a 6-step workflow entirely autonomously:</p>
 
