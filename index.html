@@ -1846,6 +1846,136 @@ box-shadow: 0 0 20px rgba(99, 102, 241, 0.12);
 .pipe-bar.b3 { height: 38px; }
 .pipe-bar.b4 { height: 58px; }
 
+/* Harness Engineering illustration */
+.harness-illustration {
+position: absolute;
+inset: 0;
+width: 100%;
+height: 100%;
+overflow: hidden;
+display: flex;
+align-items: center;
+justify-content: center;
+background: linear-gradient(135deg, #0a0e27 0%, #0f172a 60%, #1a0a2e 100%);
+font-family: 'Space Grotesk', sans-serif;
+}
+
+.harness-illustration::before {
+content: '';
+position: absolute;
+inset: 0;
+background: radial-gradient(ellipse at 30% 50%, rgba(139,92,246,0.12) 0%, transparent 55%),
+            radial-gradient(ellipse at 75% 40%, rgba(59,130,246,0.08) 0%, transparent 50%);
+pointer-events: none;
+}
+
+.harness-rings {
+position: relative;
+width: 120px;
+height: 120px;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.harness-ring {
+position: absolute;
+border-radius: 50%;
+border-style: solid;
+border-color: transparent;
+}
+
+.harness-ring-1 {
+width: 120px;
+height: 120px;
+border-width: 1px;
+border-color: rgba(99,102,241,0.5);
+border-right-color: transparent;
+border-bottom-color: transparent;
+transform: rotate(-30deg);
+animation: harness-spin-cw 8s linear infinite;
+}
+
+.harness-ring-2 {
+width: 90px;
+height: 90px;
+border-width: 1px;
+border-color: rgba(139,92,246,0.45);
+border-left-color: transparent;
+border-top-color: transparent;
+transform: rotate(20deg);
+animation: harness-spin-ccw 6s linear infinite;
+}
+
+.harness-ring-3 {
+width: 62px;
+height: 62px;
+border-width: 1.5px;
+border-color: rgba(59,130,246,0.5);
+border-right-color: transparent;
+border-bottom-color: transparent;
+animation: harness-spin-cw 4s linear infinite;
+}
+
+@keyframes harness-spin-cw  { to { transform: rotate(360deg);  } }
+@keyframes harness-spin-ccw { to { transform: rotate(-360deg); } }
+
+.harness-core {
+position: relative;
+z-index: 2;
+width: 36px;
+height: 36px;
+border-radius: 50%;
+background: rgba(99,102,241,0.18);
+border: 1.5px solid rgba(99,102,241,0.6);
+display: flex;
+align-items: center;
+justify-content: center;
+box-shadow: 0 0 18px rgba(99,102,241,0.3);
+}
+
+.harness-core-dot {
+width: 10px;
+height: 10px;
+border-radius: 50%;
+background: #a5b4fc;
+box-shadow: 0 0 8px rgba(165,180,252,0.7);
+}
+
+.harness-labels {
+position: absolute;
+inset: 0;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+padding: 12px 14px;
+pointer-events: none;
+}
+
+.harness-label-top {
+font-size: 0.55rem;
+font-weight: 700;
+letter-spacing: 0.14em;
+text-transform: uppercase;
+color: rgba(148,163,184,0.7);
+text-align: center;
+}
+
+.harness-label-bottom {
+display: flex;
+justify-content: space-between;
+}
+
+.harness-tag {
+font-family: 'JetBrains Mono', monospace;
+font-size: 0.52rem;
+padding: 0.15rem 0.4rem;
+border-radius: 4px;
+background: rgba(99,102,241,0.15);
+border: 1px solid rgba(99,102,241,0.3);
+color: #a5b4fc;
+}
+
 .insight-content {
 padding: 1.5rem;
 }
@@ -2979,6 +3109,36 @@ outline-offset: 2px;
           </div>
           <h4 class="heading-md">The Effective Product Manager</h4>
           <p>What separates a good PM from a great one: bridging technology and user needs, assessing feasibility, rapid prototyping with AI, and keeping teams aligned.</p>
+        </div>
+      </a>
+
+      <!-- Article 4 -->
+      <a href="insights/harness-engineering.html" class="insight-card fade-up stagger-4">
+        <div class="insight-image">
+          <div class="harness-illustration" aria-label="Harness engineering: model surrounded by constraint, validation, and governance layers">
+            <div class="harness-rings">
+              <div class="harness-ring harness-ring-1"></div>
+              <div class="harness-ring harness-ring-2"></div>
+              <div class="harness-ring harness-ring-3"></div>
+              <div class="harness-core"><div class="harness-core-dot"></div></div>
+            </div>
+            <div class="harness-labels">
+              <div class="harness-label-top">Harness Engineering</div>
+              <div class="harness-label-bottom">
+                <span class="harness-tag">constraint</span>
+                <span class="harness-tag">validate</span>
+                <span class="harness-tag">govern</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="insight-content">
+          <div class="insight-meta">
+            <span class="insight-category">AI Systems</span>
+            <span>14 min read</span>
+          </div>
+          <h4 class="heading-md">Harness Engineering</h4>
+          <p>The shift from prompting models to governing execution — why what surrounds the model is becoming the real engineering surface.</p>
         </div>
       </a>
     </div>

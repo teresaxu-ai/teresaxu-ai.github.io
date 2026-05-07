@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Harness Engineering | Teresa Xu</title>
+<meta name="description" content="The shift from prompting models to governing execution. As AI models grow more capable, the harness around them is becoming the real engineering surface.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary-950: #020617;
+  --primary-900: #0f172a;
+  --primary-800: #1e293b;
+  --primary-700: #334155;
+  --primary-600: #475569;
+  --primary-500: #64748b;
+  --primary-400: #94a3b8;
+  --primary-300: #cbd5e1;
+  --primary-200: #e2e8f0;
+  --primary-100: #f1f5f9;
+  --primary-50: #f8fafc;
+
+  --accent-600: #2563eb;
+  --accent-500: #3b82f6;
+  --accent-400: #60a5fa;
+  --accent-300: #93c5fd;
+  --accent-200: #dbeafe;
+  --accent-100: #f0f8ff;
+  --accent-50: #f8fbff;
+
+  --gradient-accent: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--primary-50);
+  color: var(--primary-800);
+  line-height: 1.7;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Navigation */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 15px 0;
+  background: rgba(248, 250, 252, 0.9);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar .logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-900);
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--primary-600);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--accent-600);
+  background: var(--accent-50);
+}
+
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--primary-600);
+  cursor: pointer;
+}
+
+/* Article Header */
+.article-header {
+  background: white;
+  padding: 8rem 0 4rem;
+  margin-top: 70px;
+  border-bottom: 1px solid var(--primary-200);
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--primary-500);
+}
+
+.article-category {
+  background: var(--accent-100);
+  color: var(--accent-600);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-600);
+  text-decoration: none;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  transition: color 0.3s ease;
+}
+
+.back-link:hover {
+  color: var(--accent-600);
+}
+
+.article-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--primary-900);
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.article-subtitle {
+  font-size: 1.3rem;
+  color: var(--primary-600);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.article-author-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.author-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--gradient-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+}
+
+.author-details h4 {
+  font-weight: 600;
+  color: var(--primary-900);
+}
+
+.author-details p {
+  color: var(--primary-500);
+  font-size: 0.9rem;
+}
+
+/* Article Content */
+.article-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.content-section {
+  margin-bottom: 3rem;
+}
+
+.content-section h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--primary-900);
+  margin-bottom: 1.5rem;
+  margin-top: 3rem;
+}
+
+.content-section h3 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--primary-800);
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+.content-section p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--primary-700);
+  margin-bottom: 1.5rem;
+}
+
+.content-section ul, .content-section ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.content-section li {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--primary-700);
+  margin-bottom: 0.5rem;
+}
+
+.content-section strong {
+  font-weight: 600;
+  color: var(--primary-900);
+}
+
+.highlight-box {
+  background: var(--accent-50);
+  border: 1px solid var(--accent-200);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2.5rem 0;
+  border-left: 4px solid var(--accent-500);
+}
+
+.highlight-box h4 {
+  color: var(--accent-600);
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.highlight-box p {
+  margin-bottom: 0;
+  color: var(--primary-700);
+}
+
+.quote-block {
+  border-left: 4px solid var(--primary-300);
+  padding-left: 2rem;
+  margin: 2rem 0;
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--primary-600);
+}
+
+.key-takeaway {
+  background: var(--primary-900);
+  color: white;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin: 2.5rem 0;
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.key-takeaway em { color: var(--accent-300); font-style: normal; font-weight: 600; }
+
+/* ── Visualisations ── */
+
+/* 1. Three-layer shift diagram */
+.three-layers {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 2.5rem 0;
+  border: 1px solid var(--primary-200);
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.layer-row {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--primary-200);
+}
+.layer-row:last-child { border-bottom: none; }
+
+.layer-badge {
+  width: 110px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.layer-badge.early  { background: #f1f5f9; color: var(--primary-500); }
+.layer-badge.growing { background: #eff6ff; color: #2563eb; }
+.layer-badge.emerging { background: #faf5ff; color: #7c3aed; }
+
+.layer-body {
+  flex: 1;
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+}
+
+.layer-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary-900);
+  margin-bottom: 0.2rem;
+}
+
+.layer-desc {
+  font-size: 0.88rem;
+  color: var(--primary-500);
+  margin: 0;
+}
+
+/* 2. Prompt vs Harness comparison */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin: 2.5rem 0;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.compare-card {
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid;
+}
+
+.compare-card.prompt {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+
+.compare-card.harness {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.compare-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.compare-card.prompt .compare-label { color: #92400e; }
+.compare-card.harness .compare-label { color: #166534; }
+
+.compare-example {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.compare-card.prompt .compare-example { background: #fef3c7; color: #78350f; }
+.compare-card.harness .compare-example { background: #dcfce7; color: #14532d; }
+
+.compare-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.compare-list li {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  padding: 0.25rem 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: var(--primary-700);
+  margin: 0;
+}
+
+.compare-list li::before {
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+  font-size: 0.9rem;
+}
+
+.compare-card.prompt .compare-list li::before { content: '✗'; color: #dc2626; }
+.compare-card.harness .compare-list li::before { content: '✓'; color: #16a34a; }
+
+/* 3. Five layers table */
+.five-layers {
+  margin: 2.5rem 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--primary-200);
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.five-layer-row {
+  display: grid;
+  grid-template-columns: 48px 160px 1fr;
+  align-items: stretch;
+  border-bottom: 1px solid var(--primary-200);
+}
+.five-layer-row:last-child { border-bottom: none; }
+
+.five-layer-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary-400);
+  background: var(--primary-50);
+  border-right: 1px solid var(--primary-200);
+}
+
+.five-layer-label {
+  padding: 1.1rem 1rem;
+  background: white;
+  border-right: 1px solid var(--primary-200);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.five-layer-name {
+  font-weight: 700;
+  color: var(--primary-900);
+  font-size: 0.95rem;
+}
+
+.five-layer-q {
+  font-size: 0.75rem;
+  color: var(--primary-500);
+  margin-top: 0.15rem;
+  font-style: italic;
+}
+
+.five-layer-detail {
+  padding: 1.1rem 1.25rem;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.five-layer-detail p {
+  font-size: 0.85rem;
+  color: var(--primary-600);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.five-layer-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.ftag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: var(--primary-100);
+  color: var(--primary-600);
+  border: 1px solid var(--primary-200);
+}
+
+/* row accent colours */
+.five-layer-row:nth-child(1) .five-layer-num { color: #ef4444; }
+.five-layer-row:nth-child(2) .five-layer-num { color: #f59e0b; }
+.five-layer-row:nth-child(3) .five-layer-num { color: #22c55e; }
+.five-layer-row:nth-child(4) .five-layer-num { color: #3b82f6; }
+.five-layer-row:nth-child(5) .five-layer-num { color: #8b5cf6; }
+
+/* 4. Deterministic vs Inferential */
+.validation-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin: 2.5rem 0;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.val-card {
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid;
+}
+
+.val-card.deterministic {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.val-card.inferential {
+  background: #faf5ff;
+  border-color: #ddd6fe;
+}
+
+.val-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+
+.val-card.deterministic .val-label { color: #166534; }
+.val-card.inferential .val-label { color: #6d28d9; }
+
+.val-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.val-card.deterministic .val-badge { background: #dcfce7; color: #15803d; }
+.val-card.inferential .val-badge { background: #ede9fe; color: #7c3aed; }
+
+.val-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.val-list li {
+  font-size: 0.85rem;
+  color: var(--primary-700);
+  padding: 0.3rem 0;
+  margin: 0;
+  border-bottom: 1px dashed var(--primary-200);
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.val-list li:last-child { border-bottom: none; }
+
+.val-list li::before { content: '›'; color: var(--primary-400); flex-shrink: 0; }
+
+.val-note {
+  margin-top: 0.85rem;
+  font-size: 0.78rem;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.val-card.deterministic .val-note { color: #166534; }
+.val-card.inferential .val-note { color: #6d28d9; }
+
+/* 5. Visible vs invisible constraints */
+.constraints-vis {
+  background: #0a0e27;
+  border-radius: 14px;
+  padding: 2rem;
+  margin: 2.5rem 0;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.constraints-vis::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 20% 50%, rgba(139,92,246,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 30%, rgba(59,130,246,0.06) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.cv-outer-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(148,163,184,0.7);
+  margin-bottom: 0.6rem;
+  text-align: center;
+}
+
+.cv-outer-chips {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.cv-chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 5px;
+  background: rgba(99,102,241,0.15);
+  border: 1px solid rgba(99,102,241,0.3);
+  color: #a5b4fc;
+}
+
+.cv-inner-box {
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  background: rgba(255,255,255,0.03);
+}
+
+.cv-inner-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(148,163,184,0.6);
+  margin-bottom: 0.6rem;
+  text-align: center;
+}
+
+.cv-inner-chips {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.cv-chip-inner {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 5px;
+  background: rgba(30,41,59,0.8);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(203,213,225,0.8);
+}
+
+.cv-model-node {
+  text-align: center;
+  padding: 0.75rem;
+  background: rgba(59,130,246,0.08);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 8px;
+  margin: 0 auto;
+  max-width: 220px;
+}
+
+.cv-model-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #93c5fd;
+  margin-bottom: 0.4rem;
+}
+
+.cv-model-sees {
+  font-size: 0.7rem;
+  color: rgba(148,163,184,0.7);
+  margin-bottom: 0.3rem;
+}
+
+.cv-model-exp {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  margin-top: 0.4rem;
+}
+
+.cv-allowed { color: #4ade80; }
+.cv-denied  { color: #f87171; }
+
+.cv-caption {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: rgba(148,163,184,0.55);
+}
+
+/* Related articles */
+.related-articles {
+  background: var(--primary-100);
+  padding: 3rem 2rem;
+  margin-top: 4rem;
+}
+
+.related-articles h3 {
+  text-align: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: var(--primary-900);
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.related-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--primary-200);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.related-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-200);
+}
+
+.related-card h4 {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--primary-900);
+}
+
+.related-card p {
+  color: var(--primary-600);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.related-meta {
+  font-size: 0.85rem;
+  color: var(--primary-500);
+}
+
+.footer {
+  background: var(--primary-900);
+  color: var(--primary-400);
+  padding: 3rem 0 2rem;
+}
+
+.footer-bottom {
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .article-title { font-size: 2.5rem; }
+  .article-content { padding: 3rem 1.5rem; }
+  .content-section h2 { font-size: 1.8rem; }
+
+  .compare-grid,
+  .validation-split { grid-template-columns: 1fr; }
+
+  .five-layer-row { grid-template-columns: 38px 120px 1fr; }
+
+  .navbar .container { position: relative; flex-wrap: wrap; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: rgba(248, 250, 252, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--primary-200);
+    padding: 0.75rem 0;
+    gap: 0;
+    box-shadow: var(--shadow-xl);
+    margin-top: 0.5rem;
+    border-radius: 0 0 12px 12px;
+    list-style: none;
+  }
+  .nav-links.mobile-active { display: flex; }
+  .nav-links li { width: 100%; }
+  .nav-links li a { display: block; padding: 1rem 1.5rem; font-size: 1rem; border-radius: 0; }
+  .nav-links.mobile-active a { color: var(--primary-700); }
+  .nav-links.mobile-active a:hover { color: var(--accent-600); background: var(--accent-50); }
+  .mobile-menu-toggle { display: block; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="container">
+    <a href="../index.html" class="logo">Teresa Xu</a>
+    <ul class="nav-links">
+      <li><a href="../index.html#featured-projects">Personal Projects</a></li>
+      <li><a href="../career.html">Career Journey</a></li>
+      <li><a href="../index.html#insights">Insights</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+    <button class="mobile-menu-toggle" aria-label="Open section menu" aria-expanded="false">☰</button>
+  </div>
+</nav>
+
+<!-- Article Header -->
+<header class="article-header">
+  <div class="container">
+    <a href="../index.html#insights" class="back-link">&larr; Back to Insights</a>
+
+    <div class="article-meta">
+      <span class="article-category">AI Systems</span>
+      <span>•</span>
+      <span>May 7, 2026</span>
+      <span>•</span>
+      <span>14 min read</span>
+    </div>
+
+    <h1 class="article-title">Harness Engineering</h1>
+    <p class="article-subtitle">The Shift From Prompting Models to Governing Execution</p>
+
+    <div class="article-author-info">
+      <div class="author-avatar">TX</div>
+      <div class="author-details">
+        <h4>Teresa Xu</h4>
+        <p>Product Designer &amp; AI Strategist</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Article Content -->
+<main class="article-content">
+
+  <!-- Opening -->
+  <section class="content-section">
+    <p>There's a quiet shift happening in how teams build with AI. Not in the models themselves (those keep improving regardless), but in the layer of engineering surrounding them. The question used to be: how do we prompt the model well? Now, increasingly, it's: how do we govern what the model is allowed to do?</p>
+  </section>
+
+  <!-- Layer shift -->
+  <section class="content-section">
+    <h2>How the Engineering Focus Has Shifted</h2>
+
+    <p>In 2023, a good AI product was largely a good prompt. The model was a text interface and the craft was in the asking: getting it to be specific, grounded, useful. Teams invested in prompt libraries and prompt engineers. It worked, until it didn't.</p>
+
+    <p>As models improved, the prompt stopped being the bottleneck. What the model could reason over became the constraint: what it could retrieve, remember, and fit in its window. RAG pipelines replaced prompt documents as the thing worth optimising.</p>
+
+    <p>A third shift is now underway, quieter than the other two but more consequential. When a model moves from responding to acting, the real leverage point isn't what you tell it. It's what you let it do.</p>
+
+    <div class="three-layers" aria-label="Three layers of AI engineering: prompt, context, harness">
+      <div class="layer-row">
+        <div class="layer-badge early">Early<br>focus</div>
+        <div class="layer-body">
+          <div class="layer-title">Prompt Engineering</div>
+          <p class="layer-desc">How to ask the model better questions</p>
+        </div>
+      </div>
+      <div class="layer-row">
+        <div class="layer-badge growing">Growing<br>focus</div>
+        <div class="layer-body">
+          <div class="layer-title">Context Engineering</div>
+          <p class="layer-desc">What information the model sees, retrieves, and persists</p>
+        </div>
+      </div>
+      <div class="layer-row">
+        <div class="layer-badge emerging">Emerging<br>focus</div>
+        <div class="layer-body">
+          <div class="layer-title">Harness Engineering</div>
+          <p class="layer-desc">How execution is constrained, validated, and governed</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- When models stopped just talking -->
+  <section class="content-section">
+    <h2>When Models Started Acting</h2>
+
+    <p>With early language models, the worst thing that could happen was a confident wrong answer. You read it, you moved on.</p>
+
+    <p>The calculus changed when models gained tools. Now they edit files, run shell commands, call APIs, write to databases. A bad output isn't just something to correct; it's a side effect that may already be in production. The question shifts from <em>is this answer good?</em> to something harder: <strong>should this action have been possible at all?</strong></p>
+
+    <p>That's what harness engineering addresses. The term was coined by Mitchell Hashimoto in February 2026 and formalised by OpenAI and Thoughtworks shortly after, but the underlying need predates the name. Teams had been building it ad hoc for months before anyone knew what to call it.</p>
+  </section>
+
+  <!-- Prompts vs harnesses (merged with skills) -->
+  <section class="content-section">
+    <h2>When Instructions Aren't Enough</h2>
+
+    <p>Before harness engineering had a name, most teams reached for what felt like the natural solution: skills. Write a cleanup skill, a review skill, a testing skill. Register it as a capability the agent can call. Clean and composable.</p>
+
+    <p>The problem is subtle but important. A skill is still just a prompt: structured and reusable, but fundamentally a request. The model decides whether to invoke it, when, and whether the result met the bar. An agent that already believes its output is correct won't call the review skill. You've built a governance mechanism that only activates when the system agrees it's needed.</p>
+
+    <p>This is the core tension. Any instruction living inside the prompt competes with everything else in context. The model weighs it, reasons about it, and sometimes deprioritises it. That's not a failure mode; it's how language models work. It just means that prompts and skills are the wrong tool for enforcement.</p>
+
+    <div class="compare-grid" aria-label="Prompt suggestions vs harness constraints comparison">
+      <div class="compare-card prompt">
+        <div class="compare-label">Prompt / Skill: Suggestion</div>
+        <div class="compare-example">"Please run tests<br>before finishing."</div>
+        <ul class="compare-list">
+          <li>Model may comply</li>
+          <li>Model may forget</li>
+          <li>Model may disagree and skip</li>
+          <li>Competes with other context</li>
+        </ul>
+      </div>
+      <div class="compare-card harness">
+        <div class="compare-label">Harness: Constraint</div>
+        <div class="compare-example">npm test || exit 1</div>
+        <ul class="compare-list">
+          <li>Much harder to bypass</li>
+          <li>Cannot be forgotten</li>
+          <li>Model opinion irrelevant</li>
+          <li>Environment enforces it</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>A harness doesn't ask for compliance. It enforces regardless of what the model thinks. Skills still have a valid role (extending what a model can do is genuinely useful) but they stop being governance the moment the model has discretion over whether to invoke them. When a harness forces a skill to run unconditionally on every output, that skill has become a constraint, not a feature. And a constraint is what was needed all along.</p>
+
+    <div class="key-takeaway">
+      <em>Agent = Model + Harness.</em> If you're not the model, you're the harness.
+    </div>
+  </section>
+
+  <!-- Five layers -->
+  <section class="content-section">
+    <h2>The Five Operational Layers</h2>
+
+    <p>A harness isn't a single mechanism. It's a set of concerns that have to be addressed together for an agentic system to be reliably safe to operate.</p>
+
+    <div class="five-layers" aria-label="Five operational layers of a harness system">
+      <div class="five-layer-row">
+        <div class="five-layer-num">1</div>
+        <div class="five-layer-label">
+          <div class="five-layer-name">Constraint</div>
+          <div class="five-layer-q">What can it do?</div>
+        </div>
+        <div class="five-layer-detail">
+          <p>Defines the execution boundary. Without it, agent autonomy becomes uncontrolled side effects.</p>
+          <div class="five-layer-tags">
+            <span class="ftag">shell access</span>
+            <span class="ftag">file permissions</span>
+            <span class="ftag">API scope</span>
+            <span class="ftag">prod access</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="five-layer-row">
+        <div class="five-layer-num">2</div>
+        <div class="five-layer-label">
+          <div class="five-layer-name">Guidance</div>
+          <div class="five-layer-q">What should it do?</div>
+        </div>
+        <div class="five-layer-detail">
+          <p>Shapes how the model moves through a task: not just instructions, but defined workflow stages and output schemas.</p>
+          <div class="five-layer-tags">
+            <span class="ftag">structured prompts</span>
+            <span class="ftag">workflow state</span>
+            <span class="ftag">output schemas</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="five-layer-row">
+        <div class="five-layer-num">3</div>
+        <div class="five-layer-label">
+          <div class="five-layer-name">Validation</div>
+          <div class="five-layer-q">Did it actually work?</div>
+        </div>
+        <div class="five-layer-detail">
+          <p>Correctness verified externally. The model should not certify its own output.</p>
+          <div class="five-layer-tags">
+            <span class="ftag">tests</span>
+            <span class="ftag">lint</span>
+            <span class="ftag">type checks</span>
+            <span class="ftag">schema validation</span>
+            <span class="ftag">policy</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="five-layer-row">
+        <div class="five-layer-num">4</div>
+        <div class="five-layer-label">
+          <div class="five-layer-name">Correction</div>
+          <div class="five-layer-q">What happens on failure?</div>
+        </div>
+        <div class="five-layer-detail">
+          <p>Treats failure as expected. Validation without correction only detects problems; correction drives convergence.</p>
+          <div class="five-layer-tags">
+            <span class="ftag">retry</span>
+            <span class="ftag">error feedback</span>
+            <span class="ftag">scope narrowing</span>
+            <span class="ftag">escalation</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="five-layer-row">
+        <div class="five-layer-num">5</div>
+        <div class="five-layer-label">
+          <div class="five-layer-name">Human Gates</div>
+          <div class="five-layer-q">What needs a human?</div>
+        </div>
+        <div class="five-layer-detail">
+          <p>Reserves irreversible decisions for people. Not anti-automation: a mechanism for appropriate human authority.</p>
+          <div class="five-layer-tags">
+            <span class="ftag">data deletion</span>
+            <span class="ftag">schema migration</span>
+            <span class="ftag">prod writes</span>
+            <span class="ftag">infra changes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deterministic vs inferential -->
+  <section class="content-section">
+    <h2>Deterministic vs. Inferential Validation</h2>
+
+    <p>Not all validation is equal. Some correctness checks have definitive answers: pass or fail. Others require judgment, and that's where things get interesting.</p>
+
+    <div class="validation-split" aria-label="Deterministic vs inferential validation comparison">
+      <div class="val-card deterministic">
+        <div class="val-label">Deterministic</div>
+        <div class="val-badge">Prefer when possible</div>
+        <ul class="val-list">
+          <li>ESLint / static analysis</li>
+          <li>TypeScript compiler</li>
+          <li>Unit tests</li>
+          <li>Schema validation</li>
+          <li>Forbidden-file checks</li>
+        </ul>
+        <p class="val-note">Predictable, fast, cheap. Same input always produces the same result. No model judgment involved.</p>
+      </div>
+
+      <div class="val-card inferential">
+        <div class="val-label">Inferential (LLM-based)</div>
+        <div class="val-badge">Use when deterministic can't</div>
+        <ul class="val-list">
+          <li>AI code reviewer</li>
+          <li>Semantic evaluation</li>
+          <li>Architecture critique</li>
+          <li>Style consistency review</li>
+        </ul>
+        <p class="val-note">More flexible, catches unknown problems. Slower and less reliable. Still involves model judgment.</p>
+      </div>
+    </div>
+
+    <p>The rule of thumb is to reach for deterministic checks first. They're fast, cheap, and perfectly consistent: the same input always produces the same result. Inferential validation is more flexible and can catch things no fixed rule would anticipate, but it reintroduces model judgment into the verification step.</p>
+  </section>
+
+  <!-- Invisible boundaries -->
+  <section class="content-section">
+    <h2>The Strongest Boundaries Are Invisible</h2>
+
+    <p>There's a counterintuitive principle that becomes obvious once you've watched an agent reason around a prompt restriction: the most reliable constraints are ones the model never encounters.</p>
+
+    <p>A "don't do X" instruction lives inside the model's reasoning context. It competes with other instructions, can be misread, and can sometimes be talked around by a sufficiently crafted input. Move that constraint to the infrastructure layer (a sandbox permission, a policy engine, a validator that runs before output is accepted) and it becomes invisible to the model entirely.</p>
+
+    <div class="constraints-vis" aria-label="Visible vs invisible constraint layers">
+      <div class="cv-outer-label">Infrastructure Layer · Invisible to Model</div>
+      <div class="cv-outer-chips">
+        <span class="cv-chip">sandbox permissions</span>
+        <span class="cv-chip">policy engines</span>
+        <span class="cv-chip">hidden hooks</span>
+        <span class="cv-chip">external validators</span>
+      </div>
+
+      <div class="cv-inner-box">
+        <div class="cv-inner-label">Model's Reasoning Space · Visible to Model</div>
+        <div class="cv-inner-chips">
+          <span class="cv-chip-inner">"don't do X" instructions</span>
+          <span class="cv-chip-inner">prompts</span>
+        </div>
+        <div class="cv-model-node">
+          <div class="cv-model-title">the model</div>
+          <div class="cv-model-sees">sees: allowed tools, instructions, context</div>
+          <div class="cv-model-exp">
+            <span class="cv-allowed">✓ allowed</span>
+            <span class="cv-denied">✗ denied</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cv-caption">The model experiences enforcement without seeing the implementation.<br>It cannot reason around what it cannot see.</div>
+    </div>
+
+    <p>The diagram above isn't just conceptual; it's a design principle. The further a constraint lives from natural language, the more reliably it holds.</p>
+    </div>
+  </section>
+
+  <!-- Actor should not approve own work -->
+  <section class="content-section">
+    <h2>Separate Generation from Validation</h2>
+
+    <p>We built code review, QA, and auditing into software development for a reason: people are poor judges of their own work. Not because they're careless, but because the act of building something shapes how you perceive it. Your brain fills in the gaps, reads the intention rather than the text.</p>
+
+    <p>The same dynamic applies to AI systems. A model that generates output and then evaluates it is operating under the same bias; its assessment is coloured by the same reasoning that produced the output in the first place. This is why separating generation agents from review agents matters. Some teams take it further, using a different model vendor at the evaluation step to eliminate correlated blind spots entirely.</p>
+  </section>
+
+  <!-- Harness is already around you -->
+  <section class="content-section">
+    <h2>The Harness Is Already Around You</h2>
+
+    <p>If you've used Cursor or Claude Code, you've already experienced a harness, though you may not have thought of it that way. The file scope controls, the shell access limits, the confirmation prompts before destructive actions, the error feedback loops: none of that is model behaviour. It's harness design, baked into the platform by the people who built it.</p>
+
+    <p>This is what explains something a lot of developers notice but struggle to articulate: the same underlying model behaves differently across tools. The weights are identical. What differs is what surrounds them. As foundation model capabilities converge (and they are converging) the harness is becoming the product.</p>
+  </section>
+
+  <!-- Will harnesses get thinner -->
+  <section class="content-section">
+    <h2>Harnesses Won't Disappear. They'll Become Infrastructure.</h2>
+
+    <p>It's a reasonable question: if models keep improving, won't the harness eventually become unnecessary? Won't better training just bake in the right behaviours?</p>
+
+    <p>Partly. Models are already being trained on the failure patterns that harnesses currently catch, and that reduces the need for explicit configuration. Behaviour that required a custom hook in 2024 is sometimes a default today.</p>
+
+    <p>But capability and consequence expand together. The more a model can do autonomously, the more consequential its mistakes. The governance ceiling rises in proportion to what gets automated. What changes isn't the need for a harness; it's who builds it. The logic moves from custom configuration into platform defaults, from settings files into infrastructure. Less visible, not absent. It becomes the environment.</p>
+  </section>
+
+  <!-- More harness is not always better -->
+  <section class="content-section">
+    <h2>Sufficient Control, Not Maximum Control</h2>
+
+    <p>There's a failure mode on the other end of the spectrum. A harness that's too tight, with excessive rules, conflicting hooks, and a system prompt bloated with instructions, degrades the system it was meant to protect. Context gets consumed by governance overhead. Instructions conflict. The model becomes harder to work with, not easier.</p>
+
+    <p>The right mental model isn't maximum control. It's sufficient control. Start sparse. Add constraints only when you've observed real failures. Reach for deterministic validation first because it's cheap and consistent. Automate the things humans keep doing manually. And prune constraints as models improve; a rule that was necessary last year might be unnecessary overhead today.</p>
+  </section>
+
+  <!-- Final thought -->
+  <section class="content-section">
+    <h2>A Familiar Pattern, a New Surface</h2>
+
+    <p>Capability boundaries, sandboxing, validation, separation of duties: none of these ideas are new. Software engineering has relied on them for decades. What's new is the surface they're being applied to: systems that reason and act, that make judgment calls without a human in the loop, that do real work inside production environments.</p>
+
+    <p>The engineering patterns carry over. What takes time is recognising that they need to. The instinct with AI is still often to tweak the prompt, to improve the model, to invest in better responses. The harness gets treated as optional configuration, something to add later once the basics are working.</p>
+
+    <p>But the basics don't work without it. That's the shift.</p>
+  </section>
+
+</main>
+
+<!-- Related Articles -->
+<section class="related-articles">
+  <div class="container">
+    <h3>Related Insights</h3>
+    <div class="related-grid">
+      <a href="building-ai-agents.html" class="related-card">
+        <h4>Building AI Products for Real Workflows</h4>
+        <p>Lessons from building small AI projects and watching them break: reliability, workflow integration, and what actually matters.</p>
+        <div class="related-meta">AI Strategy • 14 min read</div>
+      </a>
+      <a href="building-analytical-pipelines.html" class="related-card">
+        <h4>Building Analytical Pipelines</h4>
+        <p>Hard-won lessons on reliability, testing, monitoring, governance, and handover: beyond the code.</p>
+        <div class="related-meta">Data Engineering • 20 min read</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <p>&copy; 2025 Teresa Xu. <a href="../index.html" style="color: var(--accent-400);">Return to portfolio</a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  var toggle = document.querySelector('.mobile-menu-toggle');
+  var navLinks = document.querySelector('.nav-links');
+  if (toggle && navLinks) {
+    toggle.addEventListener('click', function() {
+      navLinks.classList.toggle('mobile-active');
+      this.setAttribute('aria-expanded', navLinks.classList.contains('mobile-active'));
+      this.textContent = navLinks.classList.contains('mobile-active') ? '✕' : '☰';
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
