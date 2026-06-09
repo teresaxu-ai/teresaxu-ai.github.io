@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>How to Use Claude AI with Power BI: Three Approaches Compared | Teresa Xu</title>
+<meta name="description" content="MCP server, pbi-cli, or manual chat — three practical ways to connect Claude to your Power BI models, what each can actually do, and when to reach for each one.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary-950: #020617;
+  --primary-900: #0f172a;
+  --primary-800: #1e293b;
+  --primary-700: #334155;
+  --primary-600: #475569;
+  --primary-500: #64748b;
+  --primary-400: #94a3b8;
+  --primary-300: #cbd5e1;
+  --primary-200: #e2e8f0;
+  --primary-100: #f1f5f9;
+  --primary-50: #f8fafc;
+
+  --accent-600: #2563eb;
+  --accent-500: #3b82f6;
+  --accent-400: #60a5fa;
+  --accent-300: #93c5fd;
+  --accent-200: #dbeafe;
+  --accent-100: #f0f8ff;
+  --accent-50: #f8fbff;
+
+  --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  --gradient-accent: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--primary-50);
+  color: var(--primary-800);
+  line-height: 1.7;
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+/* Navigation */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 15px 0;
+  background: rgba(248, 250, 252, 0.9);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+}
+.navbar .container { display: flex; justify-content: space-between; align-items: center; }
+.navbar .logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--primary-900); text-decoration: none; }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { color: var(--primary-600); text-decoration: none; font-weight: 500; padding: 0.5rem 1rem; border-radius: 25px; transition: all 0.3s ease; }
+.nav-links a:hover { color: var(--accent-600); background: var(--accent-50); }
+.mobile-menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--primary-600); cursor: pointer; }
+
+/* Article Header */
+.article-header {
+  background: white; padding: 4rem 0 2rem; margin-top: 30px;
+  border-bottom: 1px solid var(--primary-200);
+}
+.article-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--primary-500); }
+.article-category { background: var(--accent-100); color: var(--accent-600); padding: 0.25rem 0.75rem; border-radius: 12px; font-weight: 500; }
+.back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--primary-600); text-decoration: none; font-weight: 500; margin-bottom: 2rem; transition: color 0.3s ease; }
+.back-link:hover { color: var(--accent-600); }
+.article-title { font-family: 'Space Grotesk', sans-serif; font-size: 3.5rem; font-weight: 800; color: var(--primary-900); margin-bottom: 1.5rem; letter-spacing: -0.02em; line-height: 1.2; }
+.article-subtitle { font-size: 1.3rem; color: var(--primary-600); margin-bottom: 2rem; line-height: 1.5; }
+.article-author-info { display: flex; align-items: center; gap: 1rem; }
+.author-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--gradient-accent); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; }
+.author-details h4 { font-weight: 600; color: var(--primary-900); }
+.author-details p { color: var(--primary-500); font-size: 0.9rem; }
+
+/* Reflected notice */
+.reflected-notice {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: #fefce8; border: 1px solid #fde68a; border-radius: 8px;
+  padding: 0.4rem 0.9rem; font-size: 0.85rem; color: #92400e;
+  font-weight: 500; margin-top: 1.25rem;
+}
+.reflected-notice::before { content: '⏱'; font-size: 0.9rem; }
+
+/* Article Content */
+.article-content { max-width: 800px; margin: 0 auto; padding: 4rem 2rem; }
+
+.content-section { margin-bottom: 3rem; }
+.content-section h2 { font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--primary-900); margin-bottom: 1.5rem; margin-top: 3rem; }
+.content-section h3 { font-size: 1.6rem; font-weight: 600; color: var(--primary-800); margin-bottom: 1rem; margin-top: 2rem; }
+.content-section h4 { font-size: 1.15rem; font-weight: 600; color: var(--primary-900); margin-bottom: 0.5rem; margin-top: 1.5rem; }
+.content-section p { font-size: 1.1rem; line-height: 1.8; color: var(--primary-700); margin-bottom: 1.5rem; }
+.content-section ul, .content-section ol { padding-left: 1.5rem; margin-bottom: 1.5rem; }
+.content-section li { font-size: 1.1rem; line-height: 1.7; color: var(--primary-700); margin-bottom: 0.5rem; }
+.content-section strong { font-weight: 600; color: var(--primary-900); }
+
+/* Table */
+.comparison-table-wrap { overflow-x: auto; margin: 2rem 0; border-radius: 12px; border: 1px solid var(--primary-200); }
+.comparison-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.comparison-table th {
+  background: var(--primary-900); color: white; padding: 0.85rem 1.1rem;
+  text-align: left; font-weight: 600; white-space: nowrap;
+}
+.comparison-table th:first-child { width: 200px; }
+.comparison-table td { padding: 0.75rem 1.1rem; border-bottom: 1px solid var(--primary-200); color: var(--primary-700); vertical-align: top; }
+.comparison-table tr:last-child td { border-bottom: none; }
+.comparison-table tr:nth-child(even) td { background: var(--primary-50); }
+.comparison-table td:first-child { font-weight: 600; color: var(--primary-800); background: var(--primary-100) !important; }
+
+/* Skills table */
+.skills-table-wrap { overflow-x: auto; margin: 2rem 0; border-radius: 12px; border: 1px solid var(--primary-200); }
+.skills-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.skills-table th { background: var(--primary-900); color: white; padding: 0.75rem 1rem; text-align: left; font-weight: 600; }
+.skills-table td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--primary-200); color: var(--primary-700); }
+.skills-table tr:last-child td { border-bottom: none; }
+.skills-table td:first-child { font-weight: 600; color: var(--primary-800); width: 130px; }
+
+.highlight-box {
+  background: var(--accent-50); border: 1px solid var(--accent-200);
+  border-radius: 12px; padding: 2rem; margin: 2.5rem 0;
+  border-left: 4px solid var(--accent-500);
+}
+.highlight-box h4 { color: var(--accent-600); margin-bottom: 1rem; font-weight: 600; font-size: 1.1rem; }
+.highlight-box p { margin-bottom: 0; color: var(--primary-700); }
+
+.warning-box {
+  background: #fffbeb; border: 1px solid #fde68a;
+  border-radius: 12px; padding: 1.5rem 2rem; margin: 2rem 0;
+  border-left: 4px solid #f59e0b;
+}
+.warning-box p { margin-bottom: 0; color: #78350f; font-size: 1rem; }
+
+.code-block {
+  background: var(--primary-900); color: var(--primary-100);
+  padding: 1.5rem; border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.875rem;
+  line-height: 1.7; overflow-x: auto; margin: 2rem 0;
+  white-space: pre;
+}
+
+.quote-block {
+  border-left: 4px solid var(--primary-300); padding-left: 2rem;
+  margin: 2rem 0; font-style: italic; font-size: 1.2rem; color: var(--primary-600);
+}
+
+.key-takeaway {
+  background: var(--primary-900); color: white; border-radius: 12px;
+  padding: 1.5rem 2rem; margin: 2.5rem 0;
+  font-size: 1.15rem; font-weight: 500; line-height: 1.6; text-align: center;
+}
+.key-takeaway em { color: var(--accent-300); font-style: normal; font-weight: 600; }
+
+.phase-steps { counter-reset: phase; margin: 2rem 0; }
+.phase-step { display: flex; gap: 1.25rem; margin-bottom: 1.5rem; }
+.phase-step-num {
+  flex-shrink: 0; width: 40px; height: 40px;
+  background: var(--primary-900); color: white; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 1rem; margin-top: 0.15rem;
+}
+.phase-step-body h4 { font-weight: 600; color: var(--primary-900); margin-bottom: 0.35rem; margin-top: 0; }
+.phase-step-body p { font-size: 1rem; color: var(--primary-700); line-height: 1.7; margin: 0; }
+
+.method-badge {
+  display: inline-block; background: var(--primary-900); color: white;
+  font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 600;
+  padding: 0.2rem 0.7rem; border-radius: 6px; text-transform: uppercase;
+  letter-spacing: 0.05em; margin-bottom: 0.75rem;
+}
+
+.related-articles { background: var(--primary-100); padding: 3rem 2rem; margin-top: 4rem; }
+.related-articles h3 { text-align: center; font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; margin-bottom: 2rem; color: var(--primary-900); }
+.related-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 900px; margin: 0 auto; }
+.related-card { background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--primary-200); text-decoration: none; color: inherit; transition: all 0.3s ease; }
+.related-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--accent-200); }
+.related-card h4 { font-weight: 600; margin-bottom: 0.5rem; color: var(--primary-900); }
+.related-card p { color: var(--primary-600); font-size: 0.95rem; margin-bottom: 1rem; }
+.related-meta { font-size: 0.85rem; color: var(--primary-500); }
+
+.footer { background: var(--primary-900); color: var(--primary-400); padding: 3rem 0 2rem; }
+.footer-bottom { text-align: center; }
+
+@media (max-width: 768px) {
+  .article-title { font-size: 2.5rem; }
+  .article-content { padding: 3rem 1.5rem; }
+  .content-section h2 { font-size: 1.8rem; }
+  .navbar .container { position: relative; flex-wrap: wrap; }
+  .nav-links {
+    display: none; position: absolute; top: 100%; left: 0; right: 0;
+    flex-direction: column; background: rgba(248, 250, 252, 0.98);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--primary-200); padding: 0.75rem 0;
+    gap: 0; box-shadow: var(--shadow-xl); margin-top: 0.5rem;
+    border-radius: 0 0 12px 12px; list-style: none;
+  }
+  .nav-links.mobile-active { display: flex; }
+  .nav-links li { width: 100%; }
+  .nav-links li a { display: block; padding: 1rem 1.5rem; font-size: 1rem; border-radius: 0; }
+  .nav-links.mobile-active a { color: var(--primary-700); }
+  .nav-links.mobile-active a:hover { color: var(--accent-600); background: var(--accent-50); }
+  .mobile-menu-toggle { display: block; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="container">
+    <a href="../index.html" class="logo">Teresa Xu</a>
+    <ul class="nav-links">
+      <li><a href="../index.html#featured-projects">Personal Projects</a></li>
+      <li><a href="../career.html">Career Journey</a></li>
+      <li><a href="../index.html#insights">Insights</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+    <button class="mobile-menu-toggle" aria-label="Open section menu" aria-expanded="false">☰</button>
+  </div>
+</nav>
+
+<!-- Article Header -->
+<header class="article-header">
+  <div class="container">
+    <a href="../index.html#insights" class="back-link">&#8592; Back to Insights</a>
+
+    <div class="article-meta">
+      <span class="article-category">AI Tools</span>
+      <span>&#8226;</span>
+      <span>9 June 2026</span>
+      <span>&#8226;</span>
+      <span>18 min read</span>
+    </div>
+
+    <h1 class="article-title">How to Use Claude AI with Power BI: Three Approaches Compared</h1>
+    <p class="article-subtitle">Claude can connect directly to your Power BI models — reading your tables, writing DAX measures, and in some cases building full report visuals. There are three practical ways to do this and they are not interchangeable.</p>
+
+    <div class="article-author-info">
+      <div class="author-avatar">TX</div>
+      <div class="author-details">
+        <h4>Teresa Xu</h4>
+        <p>Product Designer &amp; AI Strategist</p>
+      </div>
+    </div>
+
+    <div class="reflected-notice">Reflected as of 9 June 2026</div>
+  </div>
+</header>
+
+<!-- Article Content -->
+<main class="article-content">
+
+  <!-- Overview table -->
+  <section class="content-section">
+    <h2>The Three Approaches at a Glance</h2>
+
+    <div class="comparison-table-wrap">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>MCP Server</th>
+            <th>pbi-cli</th>
+            <th>Manual in chat</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Can Claude build visuals?</td><td>No — model only</td><td>Yes — 32 visual types</td><td>No — advice only</td></tr>
+          <tr><td>Can Claude write DAX?</td><td>Yes — live, instant</td><td>Yes — live, instant</td><td>Yes — you paste it in</td></tr>
+          <tr><td>Does Claude know your model?</td><td>Yes — automatically</td><td>Yes — automatically</td><td>Only what you paste</td></tr>
+          <tr><td>Changes apply automatically?</td><td>Yes</td><td>Yes (reload for visuals)</td><td>No — always manual</td></tr>
+          <tr><td>File format needed</td><td>.pbip recommended</td><td>.pbip required for visuals</td><td>Any</td></tr>
+          <tr><td>Setup required</td><td>MCP server + config</td><td>pip install + .pbip</td><td>Nothing</td></tr>
+          <tr><td>Windows only?</td><td>Yes (Desktop connection)</td><td>Yes</td><td>No</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The honest summary: MCP gives Claude live access to your semantic model. pbi-cli does the same plus gives Claude the ability to build report visuals. Manual chat is the fallback when you cannot or do not want to install anything.</p>
+  </section>
+
+  <!-- Two layers -->
+  <section class="content-section">
+    <h2>Understanding the Two Layers in Power BI</h2>
+
+    <p>Before choosing an approach it helps to know that a Power BI file has two distinct layers:</p>
+
+    <p><strong>Semantic model layer</strong> — the data structure underneath: your tables, relationships, DAX measures, RLS (row-level security) roles, and calculation groups. This is what the MCP and pbi-cli's model tools work with.</p>
+
+    <p><strong>Report layer</strong> — the visual output: charts, tables, cards, slicers, pages, filters, and themes. This is what only pbi-cli can touch programmatically.</p>
+
+    <div class="highlight-box">
+      <h4>Important</h4>
+      <p>The MCP server only ever works with the semantic model layer. It has no awareness of your report pages or visuals at all.</p>
+    </div>
+  </section>
+
+  <!-- Method 1 -->
+  <section class="content-section">
+    <div class="method-badge">Method 1</div>
+    <h2>MCP Server</h2>
+
+    <h3>What it is</h3>
+    <p>MCP stands for Model Context Protocol — an open standard that lets Claude connect to external tools through a defined interface. For Power BI, an MCP server acts as a bridge between Claude and your live Power BI Desktop session. Claude sends a request ("create a measure called Total Revenue"), the MCP server translates that into an operation on your model, and the result appears instantly in Power BI Desktop.</p>
+
+    <p>There are several MCP server options for Power BI. The two most relevant are:</p>
+
+    <p><strong>Microsoft's official Power BI Modeling MCP Server</strong> — Microsoft's first-party tool, available as a VSCode extension. It is in public preview (as of mid-2026) and covers tables, columns, measures, relationships, DAX queries, calculation groups, RLS roles, partitions, and hierarchies. Because it is designed primarily for use with GitHub Copilot in VSCode, it works most naturally in that environment. Using it with Claude requires some additional configuration steps.</p>
+
+    <p><strong>MCP Engine</strong> — a community-built MCP server designed specifically to work well with Claude Desktop and Claude Code. The free tier covers model exploration, DAX query execution, bulk operations, and natural language queries. The Pro tier adds snapshots and rollback, a test runner for validating measures, RLS impersonation testing, impact analysis, and data masking. It connects to Power BI Desktop's local Analysis Services instance and runs entirely on your machine with no telemetry.</p>
+
+    <p>For most people using Claude, MCP Engine is the more straightforward starting point. The Microsoft server is the right choice if you are already invested in the VSCode + Copilot workflow or want Microsoft's official support.</p>
+
+    <h3>What Claude can do via MCP</h3>
+    <ul>
+      <li>Read your entire model structure — every table, column, measure, relationship, and hierarchy</li>
+      <li>Write new DAX measures and apply them live to your open file</li>
+      <li>Edit or delete existing measures</li>
+      <li>Execute DAX queries and return results within the conversation</li>
+      <li>Create and manage table relationships</li>
+      <li>Set up RLS roles and define row filter expressions</li>
+      <li>Manage calculation groups and calculation items</li>
+      <li>Bulk-rename, audit, or document your model</li>
+    </ul>
+
+    <h3>What Claude cannot do via MCP</h3>
+    <p>It cannot touch the report layer at all. No charts, no pages, no filters, no themes. If you ask Claude via MCP to "add a bar chart," it simply has no tools to do that. The MCP server is a semantic model tool only.</p>
+
+    <h3>Setup: MCP Engine with Claude Desktop</h3>
+
+    <p><strong>What you need:</strong> Power BI Desktop (Windows), Node.js v18 or later, Claude Desktop.</p>
+
+    <div class="phase-steps">
+      <div class="phase-step">
+        <div class="phase-step-num">1</div>
+        <div class="phase-step-body">
+          <h4>Save your file in .pbip format</h4>
+          <p>Open your file in Power BI Desktop and go to File → Options and settings → Options → Preview features. Enable <em>Power BI Project (.pbip) save format</em> and <em>Store semantic model using TMDL format</em>. Then save via File → Save as and choose the Power BI Project format.</p>
+        </div>
+      </div>
+      <div class="phase-step">
+        <div class="phase-step-num">2</div>
+        <div class="phase-step-body">
+          <h4>Configure Claude Desktop</h4>
+          <p>Claude Desktop stores its MCP configuration at <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em;background:var(--primary-100);padding:0.1em 0.4em;border-radius:4px;">%APPDATA%\Claude\claude_desktop_config.json</code> on Windows. Open the file and add MCP Engine:</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block">{
+  "mcpServers": {
+    "mcp-engine": {
+      "command": "npx",
+      "args": ["-y", "mcp-engine@latest"]
+    }
+  }
+}</div>
+
+    <div class="phase-steps" style="margin-top:0;">
+      <div class="phase-step">
+        <div class="phase-step-num">3</div>
+        <div class="phase-step-body">
+          <h4>Restart Claude Desktop fully</h4>
+          <p>Closing the window is not enough — the MCP server process needs to be stopped and restarted. On Windows, right-click the Claude icon in the system tray and choose Quit. Then relaunch.</p>
+        </div>
+      </div>
+      <div class="phase-step">
+        <div class="phase-step-num">4</div>
+        <div class="phase-step-body">
+          <h4>Verify the connection</h4>
+          <p>With Power BI Desktop open and your .pbip file loaded, start a new conversation and ask: <em>"Connect to my local Power BI model and list my tables."</em> If Claude returns your actual table names, the connection is working. If it doesn't, check that Node.js is installed and that <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em;background:var(--primary-100);padding:0.1em 0.4em;border-radius:4px;">npx</code> is available in your terminal.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Setup: MCP Engine with Claude Code</h3>
+    <p>Claude Code (available as a VSCode extension or standalone terminal app) uses a different configuration method. Run this once in your terminal:</p>
+
+    <div class="code-block">claude mcp add mcp-engine -- npx -y mcp-engine@latest</div>
+
+    <p>Then verify inside a Claude Code session with <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em;background:var(--primary-100);padding:0.1em 0.4em;border-radius:4px;">/mcp</code> — it will show connected servers and available tools.</p>
+
+    <h3>Example prompts once connected</h3>
+    <div class="code-block">"List all my tables and describe the relationships between them."
+
+"Create a measure called [Total Revenue] in the Sales table:
+  Total Revenue = SUM(Sales[Amount])"
+
+"Find all measures that reference columns that no longer exist
+in the model."
+
+"Rename every measure that starts with 'Old_' by removing that prefix.
+Show me what you plan to change before you apply it."
+
+"Create an RLS role called 'RegionManager' that filters the
+Sales table to rows where Sales[Region] = USERPRINCIPALNAME()."
+
+"Run a DAX query to validate that [Revenue YTD] returns
+correct values for the last three years."</div>
+  </section>
+
+  <!-- Method 2 -->
+  <section class="content-section">
+    <div class="method-badge">Method 2</div>
+    <h2>pbi-cli</h2>
+
+    <h3>What it is</h3>
+    <p>pbi-cli is an open-source community tool — not an official Microsoft or Anthropic product — built specifically for use with Claude Code. It was created by an individual developer and is actively maintained on GitHub.</p>
+
+    <p>It has two layers:</p>
+
+    <p><strong>Semantic model layer</strong> — connects to Power BI Desktop via direct .NET TOM (Tabular Object Model) interop, the same underlying API that tools like Tabular Editor use. It gives Claude the same model-editing capabilities as the MCP approach: measures, tables, relationships, RLS, snapshots, diagnostics.</p>
+
+    <p><strong>Report layer</strong> — reads and writes PBIR (Power BI Enhanced Report Format) JSON files directly from your .pbip project folder. This does not require a live connection to Power BI Desktop. Claude edits the report files, and when you reload the file in Desktop the changes appear. This is what enables Claude to actually build visuals.</p>
+
+    <div class="key-takeaway">
+      The report layer is the key thing pbi-cli adds over the MCP. It is the only approach in this comparison where <em>Claude can place a chart on a page</em> without you doing it manually.
+    </div>
+
+    <h3>What Claude can do via pbi-cli</h3>
+    <p>Everything the MCP can do with the model, plus:</p>
+    <ul>
+      <li>Add visuals to report pages — 32 types including bar, line, column, pie, scatter, table, matrix, card, KPI, slicer, and more</li>
+      <li>Bind data fields to visual roles (axes, values, legends, tooltips)</li>
+      <li>Create and delete report pages</li>
+      <li>Set page-level and visual-level filters (categorical, TopN, relative date)</li>
+      <li>Apply report themes</li>
+      <li>Manage bookmarks and drillthrough</li>
+      <li>Snapshot and restore the entire model (TMDL export/import)</li>
+      <li>Run query traces to diagnose slow measures</li>
+    </ul>
+
+    <h3>What it cannot do</h3>
+    <p>It requires your report to be saved in .pbip format. The old .pbix single-file format is not supported for report layer operations. For model-only work (no visuals), .pbix open in Desktop still works via the TOM connection. It also requires Claude Code — the VSCode extension or terminal app — not the claude.ai chat interface.</p>
+
+    <h3>Setup</h3>
+    <p><strong>What you need:</strong> Windows, Python 3.10 or later, Power BI Desktop, Claude Code (VSCode extension or standalone).</p>
+
+    <div class="phase-steps">
+      <div class="phase-step">
+        <div class="phase-step-num">1</div>
+        <div class="phase-step-body">
+          <h4>Save your file as .pbip</h4>
+          <p>Same as for the MCP: File → Save as → Power BI Project in Power BI Desktop. The .pbip format is required because the report layer reads and writes the JSON files inside the project folder directly.</p>
+        </div>
+      </div>
+      <div class="phase-step">
+        <div class="phase-step-num">2</div>
+        <div class="phase-step-body">
+          <h4>Install pbi-cli</h4>
+          <p>The recommended way is with <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em;background:var(--primary-100);padding:0.1em 0.4em;border-radius:4px;">pipx</code>, which installs the tool in its own environment and adds it to your PATH automatically:</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block">pipx install pbi-cli-tool</div>
+
+    <p>If you do not have <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em;background:var(--primary-100);padding:0.1em 0.4em;border-radius:4px;">pipx</code>, install it first with <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em;background:var(--primary-100);padding:0.1em 0.4em;border-radius:4px;">pip install pipx</code> and then run <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em;background:var(--primary-100);padding:0.1em 0.4em;border-radius:4px;">pipx ensurepath</code>. Alternatively with standard pip:</p>
+
+    <div class="code-block">pip install pbi-cli-tool</div>
+
+    <div class="warning-box">
+      <p><strong>PATH note (Windows):</strong> With <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em;">pip</code> on Windows the <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em;">pbi</code> command may not be on your PATH. If Windows can't find it, find the Scripts path with <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em;">python -c "import site; print(site.getusersitepackages().replace('site-packages', 'Scripts'))"</code> and add the output to your system PATH via System → Advanced system settings → Environment variables.</p>
+    </div>
+
+    <div class="phase-steps">
+      <div class="phase-step">
+        <div class="phase-step-num">3</div>
+        <div class="phase-step-body">
+          <h4>Connect to Power BI Desktop</h4>
+          <p>Open Power BI Desktop with your .pbip file loaded, then run <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em;background:var(--primary-100);padding:0.1em 0.4em;border-radius:4px;">pbi connect</code>. This auto-detects the running Power BI Desktop instance, establishes the connection, and installs 12 skill files into your project that teach Claude Code what it can do.</p>
+        </div>
+      </div>
+      <div class="phase-step">
+        <div class="phase-step-num">4</div>
+        <div class="phase-step-body">
+          <h4>Open Claude Code</h4>
+          <p>In VSCode: open the Command Palette (Ctrl+Shift+P) and run "Claude: Open". You do not need to explain what pbi-cli can do — the skill files installed in the previous step give Claude Code that context automatically.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <h4>Alternative: skip manual setup entirely</h4>
+      <p>If you would rather let Claude do the work, open Claude Code and say: <em>"Install and set up pbi-cli from https://github.com/MinaSaad1/pbi-cli.git"</em>. Claude Code will clone the repo, install the package, run <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em;">pbi connect</code>, and configure everything.</p>
+    </div>
+
+    <h3>The 12 skills Claude Code learns</h3>
+    <p>After connecting, Claude Code has these capabilities:</p>
+
+    <div class="skills-table-wrap">
+      <table class="skills-table">
+        <thead>
+          <tr><th>Skill</th><th>What Claude can do</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>DAX</td><td>Write, execute, and validate DAX queries and measures</td></tr>
+          <tr><td>Modeling</td><td>Create tables, relationships, measures, hierarchies</td></tr>
+          <tr><td>Deployment</td><td>Snapshot, restore, and diff the model using TMDL</td></tr>
+          <tr><td>Security</td><td>Create RLS roles, set row filter expressions</td></tr>
+          <tr><td>Docs</td><td>Generate measure inventories and data dictionaries</td></tr>
+          <tr><td>Partitions</td><td>Manage table partitions and Power Query M expressions</td></tr>
+          <tr><td>Diagnostics</td><td>Run query traces, benchmark measures, check model health</td></tr>
+          <tr><td>Report</td><td>Scaffold new PBIR reports, validate report structure</td></tr>
+          <tr><td>Visuals</td><td>Add, configure, bind, and bulk-manage 32 visual types</td></tr>
+          <tr><td>Pages</td><td>Add and delete pages, manage bookmarks and drillthrough</td></tr>
+          <tr><td>Themes</td><td>Apply and modify report themes and conditional formatting</td></tr>
+          <tr><td>Filters</td><td>Add page-level and visual-level filters</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Example prompts once connected</h3>
+    <div class="code-block">"Add a clustered bar chart to the Overview page showing
+Total Revenue by Region."
+
+"Create a new page called Executive Summary. Add a card
+for Total Revenue, a card for Gross Margin %, and a line
+chart showing revenue trend by month."
+
+"Add a TopN filter to the product table visual — top 10
+products by Total Revenue."
+
+"Apply a dark theme to the whole report."
+
+"Save a snapshot of the model before I make changes."
+
+"The [Sales MTD] measure is running slowly — run a trace
+and tell me what is causing it."</div>
+  </section>
+
+  <!-- Method 3 -->
+  <section class="content-section">
+    <div class="method-badge">Method 3</div>
+    <h2>Manual / Context in Chat</h2>
+
+    <h3>What it is</h3>
+    <p>No tools, no installation. You bring the context to Claude by pasting your model information into the claude.ai chat, and Claude writes DAX or gives you advice that you apply yourself.</p>
+
+    <h3>What works well</h3>
+    <p><strong>Writing DAX measures.</strong> If you paste your table schema (column names, data types, relationships) into chat and describe what you want, Claude will write accurate DAX using your actual field names. This is reliable and genuinely useful — the main cost is the manual copy-paste step.</p>
+
+    <p><strong>Layout and visual design advice.</strong> Claude can recommend which chart types suit your KPIs, how to structure your report pages, what slicers and filters to include, and how to arrange visuals for readability. You then build it yourself in Power BI Desktop.</p>
+
+    <p><strong>Reviewing and debugging DAX.</strong> Paste a broken measure into chat and Claude will diagnose what is wrong and rewrite it.</p>
+
+    <h3>What does not work well</h3>
+    <p><strong>Generating a working .pbix or .pbip file from scratch.</strong> Power BI's file format is complex and not publicly documented in full. Claude can write the individual pieces — measures, table definitions, M queries — but assembling them into a file that Power BI will open reliably is not something that works in practice. Treat any generated file as a rough starting point, not a finished report.</p>
+
+    <p><strong>Editing report visual JSON by hand.</strong> The report JSON in a .pbip file is structurally complex. Claude can read it and suggest changes, but one incorrect property causes Power BI to reject the entire file on import. This is fragile enough that it is not a recommended workflow — use pbi-cli instead if you need Claude to manage visuals.</p>
+
+    <h3>When to reach for it</h3>
+    <ul>
+      <li>You are on macOS or a machine without Power BI Desktop</li>
+      <li>You are in a restricted environment where you cannot install tools</li>
+      <li>You want a quick DAX measure and the copy-paste overhead is acceptable</li>
+      <li>You want Claude to design the report layout before you build it</li>
+    </ul>
+  </section>
+
+  <!-- Which to use -->
+  <section class="content-section">
+    <h2>Which Should You Use?</h2>
+
+    <p><strong>Use the MCP</strong> if your primary goal is model work — writing measures, auditing your schema, setting up security — and you want to do it from claude.ai chat with changes applied live. MCP Engine is the fastest setup; the Microsoft Modeling MCP Server is the right choice if you are already in the VSCode + Copilot ecosystem.</p>
+
+    <p><strong>Use pbi-cli</strong> if you want Claude to build the report, not just the model underneath it. It is the only approach where Claude can actually place visuals on a page. The setup takes a few minutes and requires Claude Code, but the payoff is a significantly more capable workflow.</p>
+
+    <p><strong>Use manual chat</strong> as a fallback — or as a complement to the other two when you are away from your Windows machine and just need a measure written.</p>
+
+    <div class="highlight-box">
+      <h4>They work well together</h4>
+      <p>The MCP and pbi-cli are not mutually exclusive. Use the MCP in claude.ai chat for model refinement during the day, and switch to Claude Code with pbi-cli when you want to build or rearrange report pages.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- Related Articles -->
+<section class="related-articles">
+  <div class="container">
+    <h3>Related Insights</h3>
+    <div class="related-grid">
+      <a href="building-ai-agents.html" class="related-card">
+        <h4>Building AI Products for Real Workflows</h4>
+        <p>Lessons from building small AI projects and watching them break. Observations on reliability, workflow integration, and what actually matters.</p>
+        <div class="related-meta">AI Strategy &#8226; 14 min read</div>
+      </a>
+      <a href="harness-engineering.html" class="related-card">
+        <h4>Harness Engineering</h4>
+        <p>The shift from prompting models to governing execution — why what surrounds the model is becoming the real engineering surface.</p>
+        <div class="related-meta">AI Systems &#8226; 14 min read</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <p>&#169; 2026 Teresa Xu. <a href="../index.html" style="color: var(--accent-400);">Return to portfolio</a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  var toggle = document.querySelector('.mobile-menu-toggle');
+  var navLinks = document.querySelector('.nav-links');
+  if (toggle && navLinks) {
+    toggle.addEventListener('click', function() {
+      navLinks.classList.toggle('mobile-active');
+      this.setAttribute('aria-expanded', navLinks.classList.contains('mobile-active'));
+      this.textContent = navLinks.classList.contains('mobile-active') ? '✕' : '☰';
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
